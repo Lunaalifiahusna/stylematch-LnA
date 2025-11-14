@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StyleMatch: Discover Your Perfect Outfit</title>
+
+  <!-- Tailwind CSS & jQuery -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .hidden-section {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-b from-pink-100 to-blue-100 min-h-screen font-sans text-gray-800">
+  <!-- HEADER -->
+  <header class="text-center py-8 bg-white shadow-md">
+    <h1 class="text-4xl font-bold text-pink-600">👗 StyleMatch</h1>
+    <p class="text-lg mt-2">Discover Your Perfect Outfit!</p>
+    <nav class="mt-4 space-x-4">
+      <button class="nav-btn text-pink-600 font-semibold underline" data-target="home">Home</button>
+      <button class="nav-btn text-pink-600 font-semibold underline" data-target="color">Colour Harmony</button>
+      <button class="nav-btn text-pink-600 font-semibold underline" data-target="style">Style Dictionary</button>
+    </nav>
+  </header>
+
+  <!-- ================= HOME SECTION ================= -->
+  <section id="home" class="section py-10">
+    <main class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-pink-600">Temukan Gaya yang Cocok Untukmu</h2>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block font-semibold">Pilih Gender:</label>
+          <select id="gender" class="w-full p-2 border rounded-lg">
+            <option value="">-- Pilih --</option>
+            <option value="female">Perempuan</option>
+            <option value="male">Laki-laki</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold">Pilih Warna Kulit:</label>
+          <select id="skinTone" class="w-full p-2 border rounded-lg">
+            <option value="">-- Pilih --</option>
+            <option value="putih">Putih</option>
+            <option value="kuning langsat">Kuning Langsat</option>
+            <option value="sawo matang">Sawo Matang</option>
+            <option value="gelap">Gelap</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold">Pilih Acara:</label>
+          <select id="occasion" class="w-full p-2 border rounded-lg">
+            <option value="">-- Pilih --</option>
+            <option value="kasual">Kasual</option>
+            <option value="formal">Formal</option>
+            <option value="hangout">Hangout</option>
+            <option value="kampus">Kampus / Sekolah</option>
+          </select>
+        </div>
+
+        <button id="generateBtn" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg font-semibold transition">
+          Lihat Rekomendasi
+        </button>
+      </div>
+
+      <!-- Hasil Rekomendasi -->
+      <div id="result" class="mt-6 p-4 bg-pink-50 rounded-xl hidden">
+        <h3 class="text-xl font-semibold text-pink-600">✨ Rekomendasi Kamu:</h3>
+        <p id="style" class="mt-2"></p>
+        <p id="colors" class="mt-1"></p>
+        <p id="outfit" class="mt-1"></p>
+      </div>
+    </main>
+  </section>
+
+  <!-- ================= COLOR SECTION ================= -->
+  <section id="color" class="section hidden-section py-10">
+    <div class="text-center py-6">
+      <h2 class="text-3xl font-bold text-pink-600">🎨 Colour Harmony</h2>
+      <p class="text-lg mt-2">Temukan kombinasi warna yang cocok dengan warna kulitmu!</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+      <!-- Sawo Matang -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold text-xl mb-2">Sawo Matang</h3>
+        <p class="text-sm mb-4">Cocok dengan warna: terracotta, mustard, olive, cream</p>
+        <div class="flex space-x-2">
+          <div class="w-12 h-12 bg-[rgb(190,120,80)] rounded"></div>
+          <div class="w-12 h-12 bg-yellow-500 rounded"></div>
+          <div class="w-12 h-12 bg-[rgb(110,130,90)] rounded"></div>
+          <div class="w-12 h-12 bg-[rgb(245,235,220)] rounded"></div>
+        </div>
+      </div>
+
+      <!-- Putih -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold text-xl mb-2">Putih</h3>
+        <p class="text-sm mb-4">Cocok dengan warna: soft pink, sky blue, lilac, navy</p>
+        <div class="flex space-x-2">
+          <div class="w-12 h-12 bg-pink-200 rounded"></div>
+          <div class="w-12 h-12 bg-blue-300 rounded"></div>
+          <div class="w-12 h-12 bg-purple-300 rounded"></div>
+          <div class="w-12 h-12 bg-blue-900 rounded"></div>
+        </div>
+      </div>
+
+      <!-- Kuning Langsat -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold text-xl mb-2">Kuning Langsat</h3>
+        <p class="text-sm mb-4">Cocok dengan warna: emerald, peach, ivory, maroon</p>
+        <div class="flex space-x-2">
+          <div class="w-12 h-12 bg-green-600 rounded"></div>
+          <div class="w-12 h-12 bg-orange-200 rounded"></div>
+          <div class="w-12 h-12 bg-amber-50 rounded"></div>
+          <div class="w-12 h-12 bg-red-900 rounded"></div>
+        </div>
+      </div>
+
+      <!-- Gelap -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="font-semibold text-xl mb-2">Gelap</h3>
+        <p class="text-sm mb-4">Cocok dengan warna: gold, royal blue, white, burgundy</p>
+        <div class="flex space-x-2">
+          <div class="w-12 h-12 bg-yellow-400 rounded"></div>
+          <div class="w-12 h-12 bg-blue-700 rounded"></div>
+          <div class="w-12 h-12 bg-white border rounded"></div>
+          <div class="w-12 h-12 bg-red-800 rounded"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STYLE SECTION ================= -->
+  <section id="style" class="section hidden-section py-10">
+    <div class="text-center py-6">
+      <h2 class="text-3xl font-bold text-pink-600">📖 Style Dictionary</h2>
+      <p class="text-lg mt-2">Kenali berbagai gaya berpakaian dan temukan inspirasimu!</p>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/6f/7a/d0/6f7ad046a1cf99c2aa3fa9370b2da81b.jpg" class="rounded-lg mb-3" alt="Vintage">
+        <h3 class="text-xl font-semibold">Vintage</h3>
+        <p class="text-sm mt-1 text-gray-700">Gaya klasik dengan warna warm dan potongan retro.</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/60/94/91/6094913b6b7b0b80768ac5f07091d985.jpg" class="rounded-lg mb-3" alt="Streetwear">
+        <h3 class="text-xl font-semibold">Streetwear</h3>
+        <p class="text-sm mt-1 text-gray-700">Santai tapi keren, terinspirasi dari budaya jalanan dan hip-hop.</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/43/8d/77/438d77e33c49e92bcd8c06eb7e4a2b13.jpg" class="rounded-lg mb-3" alt="Minimalist">
+        <h3 class="text-xl font-semibold">Minimalist</h3>
+        <p class="text-sm mt-1 text-gray-700">Gaya sederhana dengan warna netral dan potongan bersih.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="text-center text-sm py-8 text-gray-600">
+    <p>&copy; 2025 StyleMatch | Designed with ❤️ by LUNA & GPT-5</p>
+  </footer>
+
+  <!-- =============== SCRIPT LOGIC =============== -->
+  <script>
+    // Navigasi antar section
+    $(".nav-btn").click(function () {
+      const target = $(this).data("target");
+      $(".section").addClass("hidden-section");
+      $("#" + target).removeClass("hidden-section");
+      window.scrollTo(0, 0);
+    });
+
+    // AI Outfit Generator
+    function getOutfit(gender, skinTone, occasion) {
+      if (gender === "male" && skinTone === "sawo matang" && occasion === "kasual") {
+        return {
+          style: "Casual Streetwear",
+          colors: ["olive green", "cream", "denim"],
+          outfit: "Kaos oversized, jeans biru, sneakers putih, topi bucket"
+        };
+      } else if (gender === "female" && skinTone === "putih" && occasion === "formal") {
+        return {
+          style: "Minimalist Formal",
+          colors: ["navy", "beige", "black"],
+          outfit: "Blouse polos, midi skirt, heels netral"
+        };
+      } else if (gender === "female" && occasion === "hangout") {
+        return {
+          style: "Chic Casual",
+          colors: ["pastel pink", "white", "denim"],
+          outfit: "Crop top, celana high-waist, sneakers putih, tas kecil"
+        };
+      } else if (gender === "male" && occasion === "formal") {
+        return {
+          style: "Smart Modern",
+          colors: ["black", "grey", "white"],
+          outfit: "Kemeja polos, trousers fit, sepatu kulit, jam tangan elegan"
+        };
+      } else {
+        return {
+          style: "Universal Style",
+          colors: ["white", "black", "grey"],
+          outfit: "Outfit netral yang cocok untuk semua warna kulit"
+        };
+      }
+    }
+
+    $("#generateBtn").on("click", function () {
+      const gender = $("#gender").val();
+      const skinTone = $("#skinTone").val();
+      const occasion = $("#occasion").val();
+
+      if (!gender || !skinTone || !occasion) {
+        alert("Lengkapi semua pilihan dulu ya!");
+        return;
+      }
+
+      const result = getOutfit(gender, skinTone, occasion);
+      $("#style").html(`👕 <strong>Gaya:</strong> ${result.style}`);
+      $("#colors").html(`🎨 <strong>Warna cocok:</strong> ${result.colors.join(", ")}`);
+      $("#outfit").html(`🧢 <strong>Outfit:</strong> ${result.outfit}`);
+      $("#result").fadeIn();
+    });
+  </script>
+</body>
+</html>
