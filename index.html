@@ -36,15 +36,7 @@
     <main class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
       <h2 class="text-2xl font-semibold mb-4 text-center text-pink-600">Temukan Gaya yang Cocok Untukmu</h2>
 
-      <div class="space-y-4">
-        <div>
-          <label class="block font-semibold">Pilih Gender:</label>
-          <select id="gender" class="w-full p-2 border rounded-lg">
-            <option value="">-- Pilih --</option>
-            <option value="female">Perempuan</option>
-            <option value="male">Laki-laki</option>
-          </select>
-        </div>
+      
 
         <div>
           <label class="block font-semibold">Pilih Warna Kulit:</label>
@@ -149,7 +141,7 @@
     </div>
 
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
-      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+     
         <img src="https://i.pinimg.com/564x/6f/7a/d0/6f7ad046a1cf99c2aa3fa9370b2da81b.jpg" class="rounded-lg mb-3" alt="Vintage">
         <h3 class="text-xl font-semibold">Vintage</h3>
         <p class="text-sm mt-1 text-gray-700">Gaya klasik dengan warna warm dan potongan retro.</p>
@@ -209,31 +201,7 @@
           style: "Smart Modern",
           colors: ["black", "grey", "white"],
           outfit: "Kemeja polos, trousers fit, sepatu kulit, jam tangan elegan"
-        };
-      } else {
-        return {
-          style: "Universal Style",
-          colors: ["white", "black", "grey"],
-          outfit: "Outfit netral yang cocok untuk semua warna kulit"
-        };
-      }
-    }
-
-    $("#generateBtn").on("click", function () {
-      const gender = $("#gender").val();
-      const skinTone = $("#skinTone").val();
-      const occasion = $("#occasion").val();
-
-      if (!gender || !skinTone || !occasion) {
-        alert("Lengkapi semua pilihan dulu ya!");
-        return;
-      }
-
-      const result = getOutfit(gender, skinTone, occasion);
-      $("#style").html(`👕 <strong>Gaya:</strong> ${result.style}`);
-      $("#colors").html(`🎨 <strong>Warna cocok:</strong> ${result.colors.join(", ")}`);
-      $("#outfit").html(`🧢 <strong>Outfit:</strong> ${result.outfit}`);
-      $("#result").fadeIn();
+       
     });
   </script>
 </body>
