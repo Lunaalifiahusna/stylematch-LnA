@@ -149,23 +149,70 @@
     </div>
 
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+
+      <!-- Vintage -->
       <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
         <img src="https://i.pinimg.com/564x/6f/7a/d0/6f7ad046a1cf99c2aa3fa9370b2da81b.jpg" class="rounded-lg mb-3" alt="Vintage">
         <h3 class="text-xl font-semibold">Vintage</h3>
         <p class="text-sm mt-1 text-gray-700">Gaya klasik dengan warna warm dan potongan retro.</p>
       </div>
 
+      <!-- Streetwear -->
       <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
         <img src="https://i.pinimg.com/564x/60/94/91/6094913b6b7b0b80768ac5f07091d985.jpg" class="rounded-lg mb-3" alt="Streetwear">
         <h3 class="text-xl font-semibold">Streetwear</h3>
-        <p class="text-sm mt-1 text-gray-700">Santai tapi keren, terinspirasi dari budaya jalanan dan hip-hop.</p>
+        <p class="text-sm mt-1 text-gray-700">Santai, bold, oversized, sneakers, dan budaya jalanan.</p>
       </div>
 
+      <!-- Minimalist -->
       <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
         <img src="https://i.pinimg.com/564x/43/8d/77/438d77e33c49e92bcd8c06eb7e4a2b13.jpg" class="rounded-lg mb-3" alt="Minimalist">
         <h3 class="text-xl font-semibold">Minimalist</h3>
-        <p class="text-sm mt-1 text-gray-700">Gaya sederhana dengan warna netral dan potongan bersih.</p>
+        <p class="text-sm mt-1 text-gray-700">Gaya simpel, bersih, netral, dan elegan.</p>
       </div>
+
+      <!-- Y2K -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/4c/57/39/4c57396d88bdced21b5c7457f8687f72.jpg" class="rounded-lg mb-3" alt="Y2K">
+        <h3 class="text-xl font-semibold">Y2K</h3>
+        <p class="text-sm mt-1 text-gray-700">Crop top, low-rise jeans, warna bold, aesthetic ala 2000-an.</p>
+      </div>
+
+      <!-- Sporty -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/d4/47/ab/d447ab028a2a62c858d05c6c0daacd57.jpg" class="rounded-lg mb-3" alt="Sporty">
+        <h3 class="text-xl font-semibold">Sporty</h3>
+        <p class="text-sm mt-1 text-gray-700">Gaya aktif: track jacket, jogger, sepatu lari.</p>
+      </div>
+
+      <!-- Casual -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/736x/d0/bd/c8/d0bdc8a7fb296f91e719568b47a196d0.jpg" class="rounded-lg mb-3" alt="Casual">
+        <h3 class="text-xl font-semibold">Casual</h3>
+        <p class="text-sm mt-1 text-gray-700">T-shirt, jeans, cardigan, sneakers — santai & nyaman.</p>
+      </div>
+
+      <!-- Korean Look -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/ee/73/86/ee73866ac0903ad65379b3f9028a33cf.jpg" class="rounded-lg mb-3" alt="Korean Look">
+        <h3 class="text-xl font-semibold">Korean Look</h3>
+        <p class="text-sm mt-1 text-gray-700">Warna lembut, pleated skirt, knitwear — clean aesthetic.</p>
+      </div>
+
+      <!-- Boho -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/ae/c9/a9/aec9a9cd4435adbb2c2d6e7ca3bcab9a.jpg" class="rounded-lg mb-3" alt="Boho">
+        <h3 class="text-xl font-semibold">Boho</h3>
+        <p class="text-sm mt-1 text-gray-700">Flowy dress, earthy color, aksesoris natural.</p>
+      </div>
+
+      <!-- Romantic -->
+      <div class="bg-white p-5 rounded-2xl shadow hover:scale-105 transition">
+        <img src="https://i.pinimg.com/564x/6e/ca/31/6eca31c73774c53ae1fa5321f908db8e.jpg" class="rounded-lg mb-3" alt="Romantic">
+        <h3 class="text-xl font-semibold">Romantic</h3>
+        <p class="text-sm mt-1 text-gray-700">Lace, ruffle, pastel — feminin & lembut.</p>
+      </div>
+
     </div>
   </section>
 
@@ -174,9 +221,8 @@
     <p>&copy; 2025 StyleMatch | Designed with ❤️ by LUNA & GPT-5</p>
   </footer>
 
-  <!-- =============== SCRIPT LOGIC =============== -->
+  <!-- SCRIPT LOGIC -->
   <script>
-    // Navigasi antar section
     $(".nav-btn").click(function () {
       const target = $(this).data("target");
       $(".section").addClass("hidden-section");
@@ -184,7 +230,6 @@
       window.scrollTo(0, 0);
     });
 
-    // AI Outfit Generator
     function getOutfit(gender, skinTone, occasion) {
       if (gender === "male" && skinTone === "sawo matang" && occasion === "kasual") {
         return {
@@ -236,5 +281,6 @@
       $("#result").fadeIn();
     });
   </script>
+
 </body>
 </html>
