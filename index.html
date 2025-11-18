@@ -559,6 +559,8 @@
       // update chart
       skinChart.data.datasets[0].backgroundColor = p.colors.slice(0,4);
       skinChart.update();
+      // save to localStorage as sm_palette (array of CSS colors)
+      localStorage.setItem('sm_palette', JSON.stringify(p.colors));
     });
     $('#savePalette').on('click', function(){
       const cols = $('#selectedPalette div').map((i,el)=>$(el).css('background-color')).get();
@@ -567,10 +569,10 @@
       alert('Palette disimpan ke preferensi!');
     });
     // load saved palette
-    if(localStorage.getItem('sm_palette')){
+    if(localStorage.getItem('sm_palette')){ try {
       const arr = JSON.parse(localStorage.getItem('sm_palette'));
       $('#selectedPalette').html(arr.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
-    }
+    } catch(e){} }
 
     /* ======= Step E: Mix & Match (drag & drop) ======= */
     const mixItems = [
