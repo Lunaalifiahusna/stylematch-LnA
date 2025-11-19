@@ -6,13 +6,9 @@
   <meta name="description" content="StyleMatch — rekomendasi outfit, colour harmony, style dictionary, mix & match, quiz, and outfit randomizer. Built with HTML, Tailwind, jQuery and Chart.js." />
   <title>StyleMatch — Discover Your Perfect Outfit</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -74,7 +70,6 @@
 </head>
 <body class="theme-light">
 
-  <!-- SIDEBAR (HAMBURGER) -->
   <aside id="sidebar" aria-hidden="true">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-bold">Menu</h3>
@@ -100,7 +95,6 @@
     </div>
   </aside>
 
-  <!-- HEADER -->
   <header class="site-header">
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
       <div class="flex items-center gap-3">
@@ -128,7 +122,6 @@
 
   <main class="pt-28 pb-16">
 
-    <!-- HERO -->
     <section class="max-w-6xl mx-auto text-center px-4 py-12">
       <div class="rounded-2xl overflow-hidden card grid md:grid-cols-2 gap-6 items-center">
         <div class="p-6 text-left">
@@ -143,14 +136,12 @@
         </div>
         <div class="p-6 flex items-center justify-center">
           <div class="hero-media">
-            <!-- better modern fashion image -->
-            <img src="https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=1400&q=80" alt="hero outfit modern" class="w-full h-full object-cover" />
+            <img src="https://via.placeholder.com/1400x800/81C784/ffffff?text=HERO+IMAGE" alt="hero outfit modern" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
     </section>
 
-    <!-- HOME (Rekomendasi) -->
     <section id="home" class="section max-w-3xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600 mb-3">Temukan Gaya yang Cocok Untukmu</h2>
@@ -161,7 +152,6 @@
               <option value="">-- Pilih --</option>
               <option value="female">Perempuan</option>
               <option value="male">Laki-laki</option>
-              <option value="nonbinary">Non-binary</option>
             </select>
           </div>
           <div>
@@ -220,7 +210,6 @@
       </article>
     </section>
 
-    <!-- COLOUR HARMONY -->
     <section id="color" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600">Colour Harmony</h2>
@@ -248,7 +237,6 @@
       </article>
     </section>
 
-    <!-- STYLE DICTIONARY -->
     <section id="style" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600">Style Dictionary</h2>
@@ -268,7 +256,6 @@
       </article>
     </section>
 
-    <!-- MIX & MATCH -->
     <section id="mixmatch" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600">Mix & Match (Drag & Drop)</h2>
@@ -290,13 +277,11 @@
       </article>
     </section>
 
-    <!-- TOOLS: VIBE, BODY, WEATHER, QUIZ, GACHA (Budget removed) -->
     <section id="tools" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600">Tools</h2>
         <div class="grid md:grid-cols-3 gap-4 mt-4">
 
-          <!-- Vibes -->
           <div class="card">
             <h3 class="font-semibold">What Vibes Are You?</h3>
             <div class="mt-3 grid grid-cols-2 gap-2">
@@ -310,7 +295,6 @@
             <div id="vibeResult" class="mt-3 text-sm muted"></div>
           </div>
 
-          <!-- Body proportion -->
           <div class="card">
             <h3 class="font-semibold">Body Proportion Helper</h3>
             <input id="bpHeight" type="number" placeholder="Tinggi (cm)" class="w-full p-2 rounded mb-2" />
@@ -326,7 +310,6 @@
             <div id="bpResult" class="mt-3 text-sm muted"></div>
           </div>
 
-          <!-- Weather + Quiz + Gacha -->
           <div class="space-y-4">
             <div class="card">
               <h3 class="font-semibold">Outfit Weather Match</h3>
@@ -359,7 +342,6 @@
                 <option value="">Pilih Gender</option>
                 <option value="female">Perempuan</option>
                 <option value="male">Laki-laki</option>
-                <option value="nonbinary">Non-binary</option>
               </select>
               <button id="gachaBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Random Outfit Today 🎲</button>
               <div id="gachaResult" class="mt-2 text-sm muted"></div>
@@ -372,25 +354,22 @@
 
   </main>
 
-  <!-- STYLE MODAL -->
   <div id="styleModal" class="hidden fixed inset-0 z-50 items-center justify-center">
     <div class="modal">
       <div class="flex justify-between items-start">
         <h3 id="modalTitle" class="text-xl font-bold"></h3>
         <button id="closeModal" class="text-xl">✕</button>
       </div>
-      <img id="modalImg" src="" alt="style image" class="w-full h-56 object-cover rounded mt-3" />
+      <img id="modalImg" src="https://via.placeholder.com/900x500/ADD8E6/ffffff?text=MODAL+IMAGE" alt="style image" class="w-full h-56 object-cover rounded mt-3" />
       <p id="modalDesc" class="text-muted mt-3"></p>
       <div id="modalTags" class="mt-3 flex gap-2 flex-wrap"></div>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer class="max-w-6xl mx-auto text-center text-sm muted p-6">
     &copy; 2025 StyleMatch — Luna & Aurel. Built with ❤️.
   </footer>
 
-  <!-- SCRIPT: All logic (Step A → G) -->
   <script>
   /* ======= Initialization & Safe helpers ======= */
   (function(){ /* isolate scope */
@@ -459,7 +438,6 @@
         { cond: {gender:'female', skin:'medium', occ:'hangout'}, val:{style:'Chic Casual', colors:['dusty pink','denim','off-white'], outfit:'Crop top, high-waist jeans, sneakers putih', samples:['Crop top dusty pink + denim'] } },
         { cond: {gender:'male', skin:'medium', occ:'casual'}, val:{style:'Casual Streetwear', colors:['olive','cream','denim'], outfit:'Kaos oversized, jeans biru, sneakers putih', samples:['Oversized tee + cargo pants']} },
         { cond: {gender:'male', occ:'formal'}, val:{style:'Smart Modern', colors:['black','grey','white'], outfit:'Kemeja polos, trousers fit, sepatu kulit', samples:['Grey suit + white shirt']} },
-        { cond: {gender:'nonbinary', occ:'casual'}, val:{style:'Androgynous Minimal', colors:['charcoal','white','beige'], outfit:'Loose shirt, straight pants, sneakers', samples:['Oversized shirt + straight trousers']} }
       ];
       // try to match best
       for(let r of db){
@@ -494,13 +472,14 @@
 
     /* ======= Step B: Style Dictionary (JSON + render + modal) ======= */
     const styleData = [
-      { name:'Streetwear', category:'street', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=900&q=80', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
-      { name:'Vintage Classic', category:'classic', img:'https://images.unsplash.com/photo-1503342217505-b0a15d3b5f8a?w=900&q=80', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm'] },
-      { name:'Korean Minimalist', category:'modern', img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=900&q=80', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
-      { name:'Elegant Formal', category:'elegant', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=900&q=80', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
-      { name:'Techwear', category:'street', img:'https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?w=900&q=80', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
-      { name:'Soft Romantic', category:'minimal', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=900&q=80', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
-      { name:'Monochrome Chic', category:'modern', img:'https://images.unsplash.com/photo-1540202404-41d1b6d1a21f?w=900&q=80', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] }
+      // URL Gambar Diperbarui ke Placeholder Universal
+      { name:'Streetwear', category:'street', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=STREETWEAR', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
+      { name:'Vintage Classic', category:'classic', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=VINTAGE+CLASSIC', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm'] },
+      { name:'Korean Minimalist', category:'modern', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=KOREAN+MINIMALIST', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
+      { name:'Elegant Formal', category:'elegant', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=ELEGANT+FORMAL', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
+      { name:'Techwear', category:'street', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=TECHWEAR', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
+      { name:'Soft Romantic', category:'minimal', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=SOFT+ROMANTIC', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
+      { name:'Monochrome Chic', category:'modern', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=MONOCHROME+CHIC', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] }
     ];
 
     function renderGrid(filter='all'){
@@ -530,6 +509,7 @@
       const i = $(this).data('index');
       const s = styleData[i];
       $('#modalTitle').text(s.name);
+      // Memastikan URL gambar untuk modal juga diperbarui
       $('#modalImg').attr('src', s.img).attr('alt', s.name);
       $('#modalDesc').text(s.desc);
       $('#modalTags').html(s.tags.map(t=>`<span class="chip">${t}</span>`).join(' '));
@@ -605,12 +585,13 @@
 
     /* ======= Step E: Mix & Match (drag & drop) ======= */
     const mixItems = [
-      { id:'t1', slot:'top', name:'White Tee', img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=80' },
-      { id:'t2', slot:'top', name:'Hoodie', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=800&q=80' },
-      { id:'b1', slot:'bottom', name:'Blue Jeans', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=800&q=80' },
-      { id:'b2', slot:'bottom', name:'Cargo Pants', img:'https://images.unsplash.com/photo-1514996937319-344454492b37?w=800&q=80' },
-      { id:'s1', slot:'shoes', name:'Sneakers', img:'https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?w=800&q=80' },
-      { id:'a1', slot:'acc', name:'Beanie', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=800&q=80' }
+      // URL Gambar Diperbarui ke Placeholder Universal
+      { id:'t1', slot:'top', name:'White Tee', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=WHITE+TEE' },
+      { id:'t2', slot:'top', name:'Hoodie', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=HOODIE' },
+      { id:'b1', slot:'bottom', name:'Blue Jeans', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=BLUE+JEANS' },
+      { id:'b2', slot:'bottom', name:'Cargo Pants', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=CARGO+PANTS' },
+      { id:'s1', slot:'shoes', name:'Sneakers', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=SNEAKERS' },
+      { id:'a1', slot:'acc', name:'Beanie', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=BEANIE' }
     ];
     function renderMixItems(){
       $('#mixItems').html('');
@@ -743,7 +724,6 @@
       {gender:'female', name:'Date Night', items:['Blouse','Midi Skirt','Heels'], desc:'Soft blouse + midi skirt'},
       {gender:'male', name:'Smart Modern', items:['Shirt','Trousers','Loafers'], desc:'Button-up + trousers'},
       {gender:'female', name:'Korean Minimal', items:['Oversized Knit','Wide Pants','Sneakers'], desc:'Clean neutral look'},
-      {gender:'nonbinary', name:'Androgynous Ease', items:['Oversized Shirt','Straight Trousers','Boots'], desc:'Simple, structured, versatile'}
     ];
     $('#gachaBtn').on('click', function(){
       const g = $('#gachaGender').val(); if(!g){ alert('Pilih gender dulu'); return; }
