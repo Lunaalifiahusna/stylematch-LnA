@@ -1,922 +1,750 @@
-<!-- ========================================= -->
-<!-- ============ PART 1 START =============== -->
-<!-- ========================================= -->
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="StyleMatch — rekomendasi outfit, colour harmony, style dictionary, mix & match, quiz, budget recommender, and outfit randomizer. Built with HTML, Tailwind, jQuery and Chart.js." />
+  <title>StyleMatch — Discover Your Perfect Outfit</title>
 
-  <title>StyleMatch — Fashion Intelligence</title>
-  <meta name="description" content="StyleMatch adalah fashion web interaktif: rekomendasi outfit, colour harmony, style dictionary, dan mix & match drag-drop.">
-
-  <!-- Tailwind -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --bg: #ffffff;
-      --text: #111111;
-      --card: #ffffff;
-      --accent: #ec4899; /* pink */
-      --accent2: #3b82f6; /* blue */
+    :root{
+      --bg: linear-gradient(180deg,#f8fafc,#e6eefc);
+      --text: #0f172a;
+      --card: #fff;
+      --accent: #2563eb;
     }
+    /* Theme vars (will be toggled on body class) */
+    .theme-light { --bg: linear-gradient(180deg,#f8fafc,#e6eefc); --text:#0f172a; --card:#ffffff; --accent:#2563eb; }
+    .theme-dark { --bg: linear-gradient(180deg,#0b1220,#071125); --text:#e6eefc; --card:#0f1724; --accent:#7c3aed; }
+    .theme-pinkblue { --bg: linear-gradient(135deg,#fff0f6,#e6f0ff); --text:#0f172a; --card:#ffffff; --accent:#ec4899; }
+    .theme-bluepurple { --bg: linear-gradient(135deg,#f0f7ff,#efe6ff); --text:#0f172a; --card:#ffffff; --accent:#6366f1; }
+    .theme-bluegreen { --bg: linear-gradient(135deg,#e6fff7,#e6f4ff); --text:#0f172a; --card:#ffffff; --accent:#06b6d4; }
 
-    /* DARK MODE ROOT */
-    .dark {
-      --bg: #111111;
-      --text: #f5f5f5;
-      --card: #1b1b1b;
-      --accent: #f472b6;
-      --accent2: #60a5fa;
+    html,body{height:100%}
+    body{font-family:"Plus Jakarta Sans",system-ui,-apple-system; margin:0; background:var(--bg); color:var(--text); transition:background .3s,color .3s}
+    .card{background:var(--card); border-radius:.75rem; box-shadow:0 6px 18px rgba(8,15,52,0.06); padding:1rem}
+    header.site-header{position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(255,255,255,0.6);backdrop-filter: blur(6px);border-bottom:1px solid rgba(0,0,0,0.04)}
+    .nav-btn.active{color:var(--card); background:var(--accent); padding:.35rem .6rem; border-radius:.5rem}
+    a.cta{background:var(--accent); color:#fff; padding:.65rem 1rem; border-radius:.6rem; display:inline-block}
+    /* Sidebar */
+    #sidebar{position:fixed;left:-320px;top:0;height:100vh;width:300px;background:var(--card);z-index:80;box-shadow:10px 0 40px rgba(2,6,23,0.12);transition:left .32s;padding:1rem}
+    #sidebar.open{left:0}
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(3,7,18,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
+    .modal{width:95%;max-width:720px;background:var(--card);padding:1.2rem;border-radius:12px}
+    /* small helpers */
+    .hidden-section{display:none}
+    .hover-raise:hover{transform:translateY(-6px);transition:transform .18s}
+    img.object-cover{object-fit:cover}
+    /* responsive tweaks */
+    @media (max-width:768px){
+      header.site-header .desktop-nav{display:none}
+      header.site-header .mobile-hamb{display:block}
     }
-
-    /* CUSTOM COLOR MODE ROOT */
-    .custom-theme {
-      --bg: var(--c-bg);
-      --text: var(--c-text);
-      --card: var(--c-card);
-      --accent: var(--c-accent);
-      --accent2: var(--c-accent2);
+    @media (min-width:769px){
+      header.site-header .mobile-hamb{display:none}
     }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .card {
-      background: var(--card);
-      transition: background 0.3s;
-    }
-
-    .accent {
-      color: var(--accent);
-    }
-
-    .btn-accent {
-      background: var(--accent);
-      color: white;
-      transition: 0.25s;
-    }
-    .btn-accent:hover {
-      opacity: 0.85;
-    }
-
-    /* NAV ACTIVE */
-    .nav-active {
-      font-weight: 700;
-      border-bottom: 2px solid var(--accent);
-      color: var(--accent);
-    }
-
-    /* Hamburger */
-    #mobileMenu {
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      #mobileMenu {
-        display: block;
-      }
-      #desktopNav {
-        display: none;
-      }
-    }
+    /* aesthetic */
+    .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:rgba(0,0,0,0.04);font-size:.85rem}
+    /* drop slot */
+    .drop-slot{min-height:48px}
   </style>
 </head>
+<body class="theme-light">
 
-<body>
-
-<!-- ========================= NAVBAR ========================= -->
-<nav class="w-full fixed top-0 left-0 z-50 bg-[var(--card)] shadow">
-  <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-
-    <!-- LOGO -->
-    <h1 class="text-2xl font-bold accent">StyleMatch</h1>
-
-    <!-- DESKTOP NAV -->
-    <div id="desktopNav" class="flex space-x-8 text-lg">
-      <button class="navBtn" data-target="home">Home</button>
-      <button class="navBtn" data-target="colour">Colour Harmony</button>
-      <button class="navBtn" data-target="style">Style Dictionary</button>
-      <button class="navBtn" data-target="mixmatch">Mix & Match</button>
+  <!-- SIDEBAR (HAMBURGER) -->
+  <aside id="sidebar" aria-hidden="true">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-bold">Menu</h3>
+      <button id="closeSidebar" class="text-xl">✕</button>
     </div>
-
-    <!-- MOBILE HAMBURGER -->
-    <button id="mobileMenu" class="text-3xl">☰</button>
-  </div>
-
-  <!-- MOBILE NAV DROPDOWN -->
-  <div id="mobileNavPanel" class="hidden bg-[var(--card)] px-6 pb-4 space-y-3 text-lg">
-    <button class="navBtn block" data-target="home">Home</button>
-    <button class="navBtn block" data-target="colour">Colour Harmony</button>
-    <button class="navBtn block" data-target="style">Style Dictionary</button>
-    <button class="navBtn block" data-target="mixmatch">Mix & Match</button>
-  </div>
-</nav>
-
-<script>
-$(function(){
-  // Smooth mobile menu toggle
-  $("#mobileMenu").click(function(){
-    $("#mobileNavPanel").slideToggle(200);
-  });
-});
-</script>
-
-<!-- ========================= HERO SECTION ========================= -->
-
-<section class="hero w-full h-[90vh] flex items-center justify-center text-center px-6"
-         style="background: linear-gradient(to bottom right, var(--accent), var(--accent2)); color:white; margin-top:80px;">
-
-  <div>
-    <h2 class="text-4xl md:text-6xl font-bold mb-4 drop-shadow">
-      Upgrade Your Style Intelligence
-    </h2>
-    <p class="text-lg md:text-2xl opacity-90 max-w-2xl mx-auto">
-      Find your perfect outfit, harmony your colours, explore 30 fashion styles,
-      and create your own outfit with Mix & Match.
-    </p>
-
-    <button data-target="home"
-      class="mt-8 px-6 py-3 bg-white text-black font-semibold text-lg rounded-lg hover:opacity-80 transition navBtn">
-      Start Exploring
-    </button>
-  </div>
-
-</section>
-
-<!-- ========================================= -->
-<!-- ============ PART 1 END ================= -->
-<!-- ========================================= -->
-<!-- ========================================= -->
-<!-- ============ PART 2 START =============== -->
-<!-- ========================================= -->
-
-<main class="max-w-6xl mx-auto px-6 py-10">
-
-<!-- ====================== HOME ======================= -->
-<article id="home" class="section">
-
-  <h2 class="text-4xl font-bold mb-6 accent text-center">Find Your Best Outfit</h2>
-
-  <p class="text-center max-w-2xl mx-auto mb-10 opacity-80">
-    Temukan outfit terbaik berdasarkan gender, warna kulit, vibes, cuaca, dan acara.
-  </p>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-    <!-- LEFT FORM -->
-    <div class="card p-6 rounded-2xl shadow">
-
-      <h3 class="text-2xl font-semibold mb-4">Your Preferences</h3>
-
-      <div class="space-y-4">
-
-        <!-- GENDER -->
-        <div>
-          <label class="font-semibold">Jenis Kelamin</label>
-          <select id="h_gender" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="female">Perempuan</option>
-            <option value="male">Laki-laki</option>
-          </select>
-        </div>
-
-        <!-- SKIN TONE -->
-        <div>
-          <label class="font-semibold">Warna Kulit</label>
-          <select id="h_skin" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="putih">Putih</option>
-            <option value="kuning langsat">Kuning Langsat</option>
-            <option value="sawo matang">Sawo Matang</option>
-            <option value="gelap">Gelap</option>
-          </select>
-        </div>
-
-        <!-- VIBE -->
-        <div>
-          <label class="font-semibold">Vibe Style</label>
-          <select id="h_vibe" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="cute">Cute</option>
-            <option value="cool">Cool</option>
-            <option value="minimal">Minimal</option>
-            <option value="elegant">Elegant</option>
-            <option value="cozy">Cozy</option>
-            <option value="street">Streetwear</option>
-          </select>
-        </div>
-
-        <!-- WEATHER -->
-        <div>
-          <label class="font-semibold">Cuaca</label>
-          <select id="h_weather" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="cerah">Cerah</option>
-            <option value="mendung">Mendung</option>
-            <option value="hujan">Hujan</option>
-            <option value="dingin">Dingin</option>
-            <option value="terik">Terik</option>
-          </select>
-        </div>
-
-        <!-- SEASON -->
-        <div>
-          <label class="font-semibold">Musim</label>
-          <select id="h_season" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="spring">Spring</option>
-            <option value="summer">Summer</option>
-            <option value="autumn">Autumn</option>
-            <option value="winter">Winter</option>
-          </select>
-        </div>
-
-        <!-- LOCATION -->
-        <div>
-          <label class="font-semibold">Lokasi</label>
-          <select id="h_place" class="w-full mt-1 p-3 rounded-lg border">
-            <option value="">Pilih</option>
-            <option value="indoor">Indoor</option>
-            <option value="outdoor">Outdoor</option>
-          </select>
-        </div>
-
-        <!-- BUTTON -->
-        <button id="homeGenerateBtn"
-          class="btn-accent w-full py-3 rounded-lg text-lg font-semibold mt-3">
-          Generate Outfit
-        </button>
-
+    <nav class="space-y-2">
+      <button class="w-full text-left nav-btn p-2 rounded-md" data-target="home">Home</button>
+      <button class="w-full text-left nav-btn p-2 rounded-md" data-target="color">Colour Harmony</button>
+      <button class="w-full text-left nav-btn p-2 rounded-md" data-target="style">Style Dictionary</button>
+      <button class="w-full text-left nav-btn p-2 rounded-md" data-target="mixmatch">Mix & Match</button>
+      <button class="w-full text-left nav-btn p-2 rounded-md" data-target="tools">Tools</button>
+    </nav>
+    <hr class="my-4" />
+    <div>
+      <div class="font-semibold mb-2">Theme</div>
+      <div class="flex flex-col gap-2">
+        <button class="theme-btn p-2 rounded" data-theme="light">☀ Light</button>
+        <button class="theme-btn p-2 rounded" data-theme="dark">🌙 Dark</button>
+        <button class="theme-btn p-2 rounded" data-theme="pinkblue">💗 Pink → Blue</button>
+        <button class="theme-btn p-2 rounded" data-theme="bluepurple">💜 Blue → Purple</button>
+        <button class="theme-btn p-2 rounded" data-theme="bluegreen">💙 Blue → Green</button>
       </div>
     </div>
+  </aside>
 
-    <!-- RIGHT RESULT -->
-    <div class="card p-6 rounded-2xl shadow">
-
-      <h3 class="text-2xl font-semibold mb-4">Recommendation</h3>
-
-      <div id="homeResult" class="hidden">
-
-        <p class="text-lg mb-2"><strong>Style:</strong> <span id="r_style"></span></p>
-        <p class="text-lg mb-2"><strong>Colour Palette:</strong> <span id="r_palette"></span></p>
-        <p class="text-lg mb-2"><strong>Outfit:</strong> <span id="r_outfit"></span></p>
-
-        <img id="r_image" class="mt-4 rounded-xl w-full object-cover">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
+      <div class="flex items-center gap-3">
+        <button id="openSidebar" class="mobile-hamb text-2xl">☰</button>
+        <a href="#" class="flex items-center gap-2">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#93c5fd"/></svg>
+          <span class="text-xl font-semibold">StyleMatch</span>
+        </a>
       </div>
 
-      <p id="homePlaceholder" class="opacity-70">
-        Isi formulir di kiri untuk melihat rekomendasi outfit!
-      </p>
+      <nav class="desktop-nav flex items-center gap-3 text-sm font-medium">
+        <button class="nav-btn px-3 py-1 rounded" data-target="home">Home</button>
+        <button class="nav-btn px-3 py-1 rounded" data-target="color">Colour Harmony</button>
+        <button class="nav-btn px-3 py-1 rounded" data-target="style">Style Dictionary</button>
+        <button class="nav-btn px-3 py-1 rounded" data-target="mixmatch">Mix & Match</button>
+        <button class="nav-btn px-3 py-1 rounded" data-target="tools">Tools</button>
+      </nav>
 
+      <div class="flex items-center gap-3">
+        <button id="themeToggle" title="Change theme" class="chip">Theme</button>
+        <a href="#home" class="cta hidden md:inline-block">Start</a>
+      </div>
     </div>
+  </header>
 
+  <main class="pt-28 pb-16">
+
+    <!-- HERO -->
+    <section class="max-w-6xl mx-auto text-center px-4 py-12">
+      <div class="rounded-2xl overflow-hidden card grid md:grid-cols-2 gap-6 items-center">
+        <div class="p-6">
+          <h1 class="text-3xl md:text-4xl font-bold mb-3">Temukan Outfit Terbaik Versi Dirimu</h1>
+          <p class="text-gray-600 mb-4">Rekomendasi outfit, colour harmony, style dictionary, mix & match, dan fitur lainnya — semua dalam satu tempat.</p>
+          <div class="flex justify-center gap-3">
+            <a href="#home" class="cta">Mulai Sekarang</a>
+            <button id="exploreStyles" class="chip">Lihat Style Dictionary</button>
+          </div>
+          <div class="mt-6 text-sm text-gray-500">Designed by Luna & Aurel — Built with HTML, Tailwind, jQuery & Chart.js</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=60" alt="hero outfit" class="w-full max-w-md rounded object-cover" style="height:300px" />
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME (Rekomendasi) -->
+    <section id="home" class="section max-w-3xl mx-auto px-4 py-8">
+      <article class="card">
+        <h2 class="text-2xl font-semibold text-blue-600 mb-3">Temukan Gaya yang Cocok Untukmu</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-semibold mb-1">Pilih Gender:</label>
+            <select id="gender" class="w-full p-2 border rounded">
+              <option value="">-- Pilih --</option>
+              <option value="female">Perempuan</option>
+              <option value="male">Laki-laki</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Pilih Warna Kulit:</label>
+            <select id="skinTone" class="w-full p-2 border rounded">
+              <option value="">-- Pilih --</option>
+              <option value="putih">Putih</option>
+              <option value="kuning langsat">Kuning Langsat</option>
+              <option value="sawo matang">Sawo Matang</option>
+              <option value="gelap">Gelap</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-1">Pilih Acara:</label>
+            <select id="occasion" class="w-full p-2 border rounded">
+              <option value="">-- Pilih --</option>
+              <option value="kasual">Kasual</option>
+              <option value="formal">Formal</option>
+              <option value="hangout">Hangout</option>
+              <option value="kampus">Kampus / Sekolah</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Pilih Tempat (Indoor/Outdoor):</label>
+            <select id="placeWhere" class="w-full p-2 border rounded">
+              <option value="">-- Pilih --</option>
+              <option value="indoor">Indoor</option>
+              <option value="outdoor">Outdoor</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-1">Cuaca / Musim:</label>
+            <select id="weatherWhere" class="w-full p-2 border rounded">
+              <option value="">-- Pilih --</option>
+              <option value="sunny">Cerah</option>
+              <option value="rain">Hujan</option>
+              <option value="cloudy">Mendung</option>
+              <option value="hot">Terik</option>
+              <option value="cold">Dingin</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Lihat Rekomendasi</button>
+          </div>
+        </div>
+
+        <div id="result" class="mt-6 p-4 rounded hidden">
+          <h3 class="text-xl font-semibold text-blue-600">✨ Rekomendasi Kamu:</h3>
+          <p id="styleResult" class="mt-2"></p>
+          <p id="colors" class="mt-1"></p>
+          <p id="outfit" class="mt-1"></p>
+        </div>
+      </article>
+    </section>
+
+    <!-- COLOUR HARMONY -->
+    <section id="color" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
+      <article class="card">
+        <h2 class="text-2xl font-semibold text-blue-600">Colour Harmony</h2>
+        <p class="text-sm text-gray-600 mb-4">Klik palette untuk melihat kombinasi warna, simpan ke preferensi, dan lihat contoh cocok untuk style tertentu.</p>
+
+        <div id="swatchGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="card">
+            <h3 class="font-semibold">Selected Palette</h3>
+            <div id="selectedPalette" class="flex gap-2 mt-2"></div>
+            <p id="paletteInfo" class="text-sm text-gray-600 mt-2"></p>
+            <button id="savePalette" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Simpan ke preferensi</button>
+          </div>
+          <div class="card">
+            <h3 class="font-semibold">Skin Tone Harmony</h3>
+            <canvas id="skinToneChart" width="400" height="200"></canvas>
+            <p class="text-sm text-gray-600 mt-2">Contoh visual rekomendasi warna.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- STYLE DICTIONARY -->
+    <section id="style" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
+      <article class="card">
+        <h2 class="text-2xl font-semibold text-blue-600">Style Dictionary</h2>
+        <p class="text-sm text-gray-600 mb-4">Klik card untuk melihat detail style.</p>
+
+        <div class="mb-4 flex gap-2 flex-wrap">
+          <button class="filter-btn px-3 py-1 rounded bg-blue-600 text-white" data-filter="all">Semua</button>
+          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="modern">Modern</button>
+          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="classic">Classic</button>
+          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="street">Street</button>
+          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="elegant">Elegant</button>
+        </div>
+
+        <div id="styleGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+      </article>
+    </section>
+
+    <!-- MIX & MATCH -->
+    <section id="mixmatch" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
+      <article class="card">
+        <h2 class="text-2xl font-semibold text-blue-600">Mix & Match (Drag & Drop)</h2>
+        <p class="text-sm text-gray-600 mb-4">Seret item ke slot yang sesuai untuk menyusun outfit-mu.</p>
+
+        <div class="grid md:grid-cols-3 gap-4">
+          <div id="mixItems" class="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+          <div class="card">
+            <h3 class="font-semibold">Your Outfit</h3>
+            <div id="dropArea" class="mt-3 space-y-2">
+              <div class="drop-slot p-2 border rounded" data-slot="top">Top: <span class="slot-val">—</span></div>
+              <div class="drop-slot p-2 border rounded" data-slot="bottom">Bottom: <span class="slot-val">—</span></div>
+              <div class="drop-slot p-2 border rounded" data-slot="shoes">Shoes: <span class="slot-val">—</span></div>
+              <div class="drop-slot p-2 border rounded" data-slot="acc">Accessory: <span class="slot-val">—</span></div>
+            </div>
+            <button id="saveOutfit" class="mt-3 bg-blue-600 text-white px-3 py-2 rounded">Simpan Outfit</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- TOOLS: VIBE, BODY, WEATHER, BUDGET, QUIZ, GACHA -->
+    <section id="tools" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
+      <article class="card">
+        <h2 class="text-2xl font-semibold text-blue-600">Tools</h2>
+        <div class="grid md:grid-cols-3 gap-4 mt-4">
+
+          <!-- Vibes -->
+          <div class="card">
+            <h3 class="font-semibold">What Vibes Are You?</h3>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cute">Cute</button>
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="minimal">Minimal</button>
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="elegant">Elegant</button>
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cool">Cool</button>
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cozy">Cozy</button>
+              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="street">Street</button>
+            </div>
+            <div id="vibeResult" class="mt-3 text-sm text-gray-600"></div>
+          </div>
+
+          <!-- Body proportion -->
+          <div class="card">
+            <h3 class="font-semibold">Body Proportion Helper</h3>
+            <input id="bpHeight" type="number" placeholder="Tinggi (cm)" class="w-full p-2 border rounded mb-2" />
+            <input id="bpWeight" type="number" placeholder="Berat (kg)" class="w-full p-2 border rounded mb-2" />
+            <select id="bpShape" class="w-full p-2 border rounded mb-2">
+              <option value="">Pilih bentuk tubuh (opsional)</option>
+              <option value="petite">Petite</option>
+              <option value="tall">Tall</option>
+              <option value="curvy">Curvy</option>
+              <option value="slim">Slim</option>
+            </select>
+            <button id="calcBP" class="mt-1 bg-blue-600 text-white px-3 py-2 rounded">Dapatkan Tips</button>
+            <div id="bpResult" class="mt-3 text-sm text-gray-600"></div>
+          </div>
+
+          <!-- Weather + Budget + Quiz + Gacha -->
+          <div class="space-y-4">
+            <div class="card">
+              <h3 class="font-semibold">Outfit Weather Match</h3>
+              <select id="weatherSel" class="w-full p-2 border rounded mt-2">
+                <option value="">Pilih Cuaca</option>
+                <option value="sunny">Cerah</option>
+                <option value="rain">Hujan</option>
+                <option value="cloudy">Mendung</option>
+                <option value="hot">Terik</option>
+                <option value="cold">Dingin</option>
+              </select>
+              <select id="placeSel" class="w-full p-2 border rounded mt-2">
+                <option value="">Indoor / Outdoor?</option>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+              <button id="weatherBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Lihat Rekomendasi</button>
+              <div id="weatherResult" class="mt-2 text-sm text-gray-600"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="font-semibold">Budget Outfit Recommender</h3>
+              <select id="budgetSel" class="w-full p-2 border rounded mt-2">
+                <option value="">Pilih Budget</option>
+                <option value="50-200">Rp 50.000 – Rp 200.000</option>
+                <option value="200-500">Rp 200.000 – Rp 500.000</option>
+                <option value="500-2000">Rp 500.000 – Rp 2.000.000</option>
+              </select>
+              <button id="budgetBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Cek</button>
+              <div id="budgetResult" class="mt-2 text-sm text-gray-600"></div>
+            </div>
+
+            <div class="card">
+              <h3 class="font-semibold">Style Quiz (5 pertanyaan)</h3>
+              <div id="quizArea" class="mt-2"></div>
+              <button id="startQuiz" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Mulai Quiz</button>
+            </div>
+
+            <div class="card">
+              <h3 class="font-semibold">Outfit Randomizer (Gacha)</h3>
+              <select id="gachaGender" class="w-full p-2 border rounded mt-2">
+                <option value="">Pilih Gender</option>
+                <option value="female">Perempuan</option>
+                <option value="male">Laki-laki</option>
+              </select>
+              <button id="gachaBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Random Outfit Today 🎲</button>
+              <div id="gachaResult" class="mt-2 text-sm text-gray-600"></div>
+            </div>
+          </div>
+
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- STYLE MODAL -->
+  <div id="styleModal" class="hidden fixed inset-0 z-50 items-center justify-center">
+    <div class="modal">
+      <div class="flex justify-between items-start">
+        <h3 id="modalTitle" class="text-xl font-bold"></h3>
+        <button id="closeModal" class="text-xl">✕</button>
+      </div>
+      <img id="modalImg" src="" alt="style image" class="w-full h-56 object-cover rounded mt-3" />
+      <p id="modalDesc" class="text-gray-600 mt-3"></p>
+      <div id="modalTags" class="mt-3 flex gap-2 flex-wrap"></div>
+    </div>
   </div>
-</article>
 
-</main>
+  <!-- FOOTER -->
+  <footer class="max-w-6xl mx-auto text-center text-sm text-gray-600 p-6">
+    &copy; 2025 StyleMatch — Luna & Aurel. Built with ❤️.
+  </footer>
 
-<!-- ==================== JS HOME LOGIC ==================== -->
-<script>
-const HOME_DB = {
+  <!-- SCRIPT: All logic (Step A → G) -->
+  <script>
+  /* ======= Initialization & Safe helpers ======= */
+  (function(){ /* isolate scope */
+    // Simple helper
+    function $(sel){ return jQuery(sel); }
 
-  vibes: {
-    cute: {
-      palette: ["pink pastel", "cream", "sky blue"],
-      style: "Soft Cute",
-      outfit: "cardigan pastel + pleated skirt + mary jane",
-      img: "https://i.pinimg.com/564x/e4/ee/0a/e4ee0ad08c9eee921340dcd73c1b0e99.jpg"
-    },
-    cool: {
-      palette: ["black", "navy", "grey"],
-      style: "Urban Cool",
-      outfit: "oversized hoodie + baggy jeans + sneakers",
-      img: "https://i.pinimg.com/564x/3c/df/56/3cdf56f3de4b2c9b10480353b08c17fd.jpg"
-    },
-    minimal: {
-      palette: ["white", "beige", "taupe"],
-      style: "Clean Minimalist",
-      outfit: "linen shirt + straight pants + loafers",
-      img: "https://i.pinimg.com/564x/87/f2/1c/87f21c5a09adabf3d6a8ea26c84a4f38.jpg"
-    },
-    elegant: {
-      palette: ["burgundy", "champagne", "navy"],
-      style: "Modern Elegant",
-      outfit: "silk blouse + midi skirt + heels",
-      img: "https://i.pinimg.com/564x/65/b9/6b/65b96b19682bcb357d8cb73f5ed7a0b2.jpg"
-    },
-    cozy: {
-      palette: ["brown", "cream", "soft green"],
-      style: "Warm Cozy",
-      outfit: "knit sweater + wide pants + warm boots",
-      img: "https://i.pinimg.com/564x/16/7c/af/167caf559eb59932b1f0fcb918f0dc48.jpg"
-    },
-    street: {
-      palette: ["black", "white", "red"],
-      style: "Streetwear Hype",
-      outfit: "graphic tee + cargo pants + chunky sneakers",
-      img: "https://i.pinimg.com/564x/fb/2d/8f/fb2d8f079b123bdee55b4eb4ebdf6d37.jpg"
+    // Theme load from localStorage
+    const savedTheme = localStorage.getItem('sm_theme') || 'light';
+    document.body.className = 'theme-' + savedTheme;
+
+    // Nav behavior
+    function setActiveNav(target){
+      $('.nav-btn').removeClass('active').css('background','').css('color','');
+      $('.nav-btn[data-target="'+target+'"]').addClass('active');
     }
-  }
-};
 
-// GENERATOR
-$("#homeGenerateBtn").click(function(){
-
-  const vibe = $("#h_vibe").val();
-  if(!vibe){ alert("Lengkapi semua pilihan!"); return; }
-
-  const data = HOME_DB.vibes[vibe];
-
-  $("#homePlaceholder").hide();
-  $("#homeResult").show();
-
-  $("#r_style").text(data.style);
-  $("#r_palette").text(data.palette.join(", "));
-  $("#r_outfit").text(data.outfit);
-  $("#r_image").attr("src", data.img);
-});
-</script>
-
-<!-- ========================================= -->
-<!-- ============ PART 2 END ================= -->
-<!-- ========================================= -->
-<!-- ========================================= -->
-<!-- ============ PART 3 START =============== -->
-<!-- ========================================= -->
-
-<main class="max-w-6xl mx-auto px-6 py-10">
-
-<!-- ====================== COLOUR HARMONY ======================= -->
-<article id="colour" class="section hidden">
-
-  <h2 class="text-4xl font-bold mb-6 accent text-center">Colour Harmony</h2>
-
-  <p class="text-center max-w-2xl mx-auto mb-8 opacity-80">
-    Temukan kombinasi warna terbaik berdasarkan warna kulit dan vibes fashion-mu.
-  </p>
-
-  <!-- SKIN TONE CHART -->
-  <div class="card p-6 rounded-2xl shadow mb-10">
-    <h3 class="text-2xl font-semibold mb-4">Skin Tone Harmony Chart</h3>
-    <canvas id="skinChart" height="130"></canvas>
-  </div>
-
-  <!-- SKIN TONE PALETTES -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-    <!-- SAWO MATANG -->
-    <div class="card p-6 rounded-2xl shadow">
-      <h3 class="text-xl font-bold mb-2">Sawo Matang</h3>
-      <p class="opacity-80 text-sm mb-3">Warna terbaik: terracotta, olive, cream, mustard.</p>
-
-      <div class="flex space-x-3">
-        <div class="w-14 h-14 rounded-lg bg-[rgb(190,120,80)] colorBlock" data-color="#BE7850"></div>
-        <div class="w-14 h-14 rounded-lg bg-yellow-500 colorBlock" data-color="#FBBF24"></div>
-        <div class="w-14 h-14 rounded-lg bg-[rgb(110,130,90)] colorBlock" data-color="#6E825A"></div>
-        <div class="w-14 h-14 rounded-lg bg-[rgb(245,235,220)] colorBlock" data-color="#F5EBDC"></div>
-      </div>
-    </div>
-
-    <!-- PUTIH -->
-    <div class="card p-6 rounded-2xl shadow">
-      <h3 class="text-xl font-bold mb-2">Putih</h3>
-      <p class="opacity-80 text-sm mb-3">Warna terbaik: soft pink, sky blue, lilac, navy.</p>
-
-      <div class="flex space-x-3">
-        <div class="w-14 h-14 rounded-lg bg-pink-200 colorBlock" data-color="#FBCFE8"></div>
-        <div class="w-14 h-14 rounded-lg bg-blue-300 colorBlock" data-color="#93C5FD"></div>
-        <div class="w-14 h-14 rounded-lg bg-purple-300 colorBlock" data-color="#D8B4FE"></div>
-        <div class="w-14 h-14 rounded-lg bg-blue-900 colorBlock" data-color="#1E3A8A"></div>
-      </div>
-    </div>
-
-    <!-- KUNING LANGSAT -->
-    <div class="card p-6 rounded-2xl shadow">
-      <h3 class="text-xl font-bold mb-2">Kuning Langsat</h3>
-      <p class="opacity-80 text-sm mb-3">Warna terbaik: emerald, peach, ivory, maroon.</p>
-
-      <div class="flex space-x-3">
-        <div class="w-14 h-14 rounded-lg bg-green-600 colorBlock" data-color="#16A34A"></div>
-        <div class="w-14 h-14 rounded-lg bg-orange-200 colorBlock" data-color="#FED7AA"></div>
-        <div class="w-14 h-14 rounded-lg bg-amber-50 colorBlock" data-color="#FEF3C7"></div>
-        <div class="w-14 h-14 rounded-lg bg-red-900 colorBlock" data-color="#7F1D1D"></div>
-      </div>
-    </div>
-
-    <!-- GELAP -->
-    <div class="card p-6 rounded-2xl shadow">
-      <h3 class="text-xl font-bold mb-2">Gelap</h3>
-      <p class="opacity-80 text-sm mb-3">Warna terbaik: gold, royal blue, white, burgundy.</p>
-
-      <div class="flex space-x-3">
-        <div class="w-14 h-14 rounded-lg bg-yellow-400 colorBlock" data-color="#FACC15"></div>
-        <div class="w-14 h-14 rounded-lg bg-blue-700 colorBlock" data-color="#1D4ED8"></div>
-        <div class="w-14 h-14 rounded-lg bg-white border colorBlock" data-color="#FFFFFF"></div>
-        <div class="w-14 h-14 rounded-lg bg-red-800 colorBlock" data-color="#991B1B"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- OUTPUT RECOMENDATION -->
-  <div class="card mt-10 p-6 rounded-2xl shadow hidden" id="colourResult">
-    <h3 class="text-xl font-bold mb-2">Palette Insight</h3>
-    <p><strong>Warna:</strong> <span id="cr_color"></span></p>
-    <p><strong>Cocok Untuk Style:</strong> <span id="cr_style"></span></p>
-  </div>
-
-</article>
-
-</main>
-
-<!-- ====================== JS COLOUR LOGIC ======================= -->
-<script>
-// Skin tone chart
-const ctx = document.getElementById("skinChart");
-new Chart(ctx, {
-  type: "pie",
-  data: {
-    labels: ["Sawo Matang", "Putih", "Kuning Langsat", "Gelap"],
-    datasets: [{
-      data: [28, 22, 25, 25],
-      backgroundColor: ["#BE7850", "#FBCFE8", "#16A34A", "#991B1B"]
-    }]
-  }
-});
-
-// Mapping warna → gaya fashion
-const COLOR_STYLE_MAP = {
-  "#BE7850": "Earthy Boho, Vintage Warm",
-  "#FBBF24": "Casual Fresh, Street Yellow Pop",
-  "#6E825A": "Nature Minimalist, Green Core",
-  "#F5EBDC": "Soft Neutral, Romantic Pastel",
-
-  "#FBCFE8": "Regencycore, Cute Sweet, Korean Look",
-  "#93C5FD": "Soft Modern, Minimal Street Blue",
-  "#D8B4FE": "Fairycore, Y2K Lavender",
-  "#1E3A8A": "Classic Navy Chic, Elegant Formal",
-
-  "#16A34A": "Emerald Elegant, Chic Greenwave",
-  "#FED7AA": "Peach Pastelcore",
-  "#FEF3C7": "Ivory Minimal Luxe",
-  "#7F1D1D": "Maroon Royal, Dark Academia",
-
-  "#FACC15": "Golden Pop, Luxury Street",
-  "#1D4ED8": "Royal Blue Cool",
-  "#FFFFFF": "Clean Minimal, All Style",
-  "#991B1B": "Burgundy Elegance"
-};
-
-// Click warna → tampilkan info
-$(".colorBlock").click(function(){
-  const color = $(this).data("color");
-  $("#colourResult").show();
-  $("#cr_color").text(color);
-  $("#cr_style").text(COLOR_STYLE_MAP[color] || "Semua Style");
-});
-</script>
-
-<!-- ========================================= -->
-<!-- ============ PART 3 END ================= -->
-<!-- ========================================= -->
-<!-- ================================================= -->
-<!-- =============== PHASE 4 — PART 1 ================= -->
-<!-- ================================================= -->
-
-<main class="max-w-6xl mx-auto px-6 py-10">
-
-<article id="styles" class="section hidden">
-
-  <h2 class="text-4xl font-bold mb-6 accent text-center">Style Dictionary</h2>
-  <p class="text-center max-w-2xl mx-auto opacity-80 mb-10">
-    Telusuri berbagai style fashion dari klasik hingga modern. Klik salah satu untuk melihat detail lengkap.
-  </p>
-
-  <!-- MODE TOGGLE -->
-  <div class="flex justify-center mb-8 gap-4">
-    <button id="modeMinimal" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-900 font-medium hover:opacity-80">
-      Minimal Mode
-    </button>
-    <button id="modeEditorial" class="px-4 py-2 rounded-lg bg-gray-900 text-white font-medium hover:opacity-80">
-      Editorial Mode
-    </button>
-  </div>
-
-  <!-- GRID STYLE WRAPPER -->
-  <div id="styleGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 transition-all duration-300"></div>
-
-</article>
-
-</main>
-
-<!-- ======================== MODAL ========================= -->
-<div id="styleModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden">
-  <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-2xl max-w-lg w-full scale-90 opacity-0 transition-all duration-300" id="modalInner">
-
-    <button id="closeModal" class="float-right text-gray-500 text-xl hover:text-black">&times;</button>
-
-    <h2 id="m_title" class="text-2xl font-bold mb-2"></h2>
-    <img id="m_img" class="w-full h-56 rounded-xl object-cover mb-4">
-
-    <h3 class="font-semibold text-lg mb-1">Ciri Khas</h3>
-    <p id="m_features" class="opacity-80 mb-3"></p>
-
-    <h3 class="font-semibold text-lg mb-1">Cocok Untuk</h3>
-    <p id="m_fit" class="opacity-80 mb-3"></p>
-
-    <h3 class="font-semibold text-lg mb-1">Warna yang Direkomendasikan</h3>
-    <p id="m_colors" class="opacity-80 mb-3"></p>
-
-    <h3 class="font-semibold text-lg mb-1">Contoh Item</h3>
-    <p id="m_items" class="opacity-80"></p>
-
-  </div>
-</div>
-
-<!-- ===================== JS DATABASE ======================= -->
-<script>
-// =========================
-//    30 STYLE DATABASE
-// =========================
-
-const STYLE_DB = [
-  {
-    id: 1,
-    name: "Minimalist",
-    img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-    features: "Clean, netral, simple, tidak banyak aksesoris.",
-    fit: "Semua bentuk tubuh.",
-    colors: "White, black, beige, gray.",
-    items: "Basic tee, straight pants, sneakers."
-  },
-  {
-    id: 2,
-    name: "Streetwear",
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-    features: "Oversize, graphic, layering.",
-    fit: "Remaja–dewasa, casual.",
-    colors: "Black, neon, navy, gray.",
-    items: "Hoodie, cargo pants, chunky sneakers."
-  },
-  {
-    id: 3,
-    name: "Vintage",
-    img: "https://images.unsplash.com/photo-1529070538774-1843cb3265df",
-    features: "Retro klasik 70s–90s.",
-    fit: "Pencinta fashion nostalgia.",
-    colors: "Brown, mustard, olive.",
-    items: "Cardigan, mom jeans, loafers."
-  },
-  {
-    id: 4,
-    name: "Korean Casual",
-    img: "https://images.unsplash.com/photo-1521335629791-ce4aec67dd47",
-    features: "Soft, cute, clean aesthetic.",
-    fit: "Tubuh petite, slim.",
-    colors: "Soft pink, cream, pastel.",
-    items: "Blouse, pleated skirt, canvas shoes."
-  },
-  {
-    id: 5,
-    name: "Dark Academia",
-    img: "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb",
-    features: "Moody, klasik, intelektual.",
-    fit: "Tinggi / proporsi proporsional.",
-    colors: "Brown, maroon, dark green.",
-    items: "Turtleneck, coat, oxford shoes."
-  },
-  {
-    id: 6,
-    name: "Soft Girl",
-    img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4c",
-    features: "Cute, pastel, sweet.",
-    fit: "Remaja–dewasa muda.",
-    colors: "Pink, lilac, baby blue.",
-    items: "Crop sweater, pleated skirt, warm makeup."
-  },
-  {
-    id: 7,
-    name: "Sporty Athleisure",
-    img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d",
-    features: "Comfort, aktif, modern.",
-    fit: "Semua bentuk tubuh.",
-    colors: "Black, white, navy.",
-    items: "Track pants, sports bra, running shoes."
-  },
-  {
-    id: 8,
-    name: "Casual Smart",
-    img: "https://images.unsplash.com/photo-1521579741670-1264b39e0798",
-    features: "Rapi, modern, semi-formal.",
-    fit: "College student & worker.",
-    colors: "Navy, brown, beige.",
-    items: "Shirt, chinos, loafers."
-  },
-  {
-    id: 9,
-    name: "Elegant Chic",
-    img: "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43",
-    features: "Dewasa, rapi, feminine/masculine clean.",
-    fit: "Tinggi, ramping.",
-    colors: "White, gold, black.",
-    items: "Blazer, silk blouse, heels/oxfords."
-  },
-  {
-    id: 10,
-    name: "Harajuku",
-    img: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb",
-    features: "Colorful, experimental, fun.",
-    fit: "Ekspresif.",
-    colors: "Neon, pastel, clash.",
-    items: "Layered outfits, platform shoes."
-  }
-];
-
-// =================================================
-// RENDER GRID
-// =================================================
-function renderStyles() {
-  const grid = document.getElementById("styleGrid");
-  grid.innerHTML = "";
-
-  STYLE_DB.forEach(style => {
-    const card = document.createElement("div");
-    card.className = "rounded-2xl overflow-hidden shadow hover:scale-[1.02] transition cursor-pointer bg-white dark:bg-neutral-900";
-
-    card.innerHTML = `
-      <img src="${style.img}" class="w-full h-52 object-cover">
-      <div class="p-4">
-        <h3 class="font-bold text-lg mb-1">${style.name}</h3>
-        <p class="text-sm opacity-80">${style.features.substring(0, 60)}...</p>
-      </div>
-    `;
-
-    card.addEventListener("click", () => openStyleModal(style));
-    grid.appendChild(card);
-  });
-}
-
-renderStyles();
-
-// =================================================
-// MODAL LOGIC
-// =================================================
-function openStyleModal(s) {
-  document.getElementById("styleModal").classList.remove("hidden");
-
-  document.getElementById("m_title").textContent = s.name;
-  document.getElementById("m_img").src = s.img;
-  document.getElementById("m_features").textContent = s.features;
-  document.getElementById("m_fit").textContent = s.fit;
-  document.getElementById("m_colors").textContent = s.colors;
-  document.getElementById("m_items").textContent = s.items;
-
-  setTimeout(() => {
-    document.getElementById("modalInner").classList.remove("scale-90", "opacity-0");
-  }, 10);
-}
-
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("modalInner").classList.add("scale-90", "opacity-0");
-  setTimeout(() => {
-    document.getElementById("styleModal").classList.add("hidden");
-  }, 200);
-};
-
-</script>
-<script>
-/* =========================================================
-                PHASE 5 — FULL VERSION
-   Mode System + Renderer + Modal + Animation
-========================================================= */
-
-/* --------------------------
-   MODE SYSTEM (Minimal / Editorial / Hybrid)
----------------------------*/
-let currentMode = "minimal";
-
-$("#modeMinimal").on("click", function () {
-  currentMode = "minimal";
-  renderStyles();
-});
-
-$("#modeEditorial").on("click", function () {
-  currentMode = "editorial";
-  renderStyles();
-});
-
-$("#modeHybrid").on("click", function () {
-  currentMode = "hybrid";
-  renderStyles();
-});
-
-
-/* --------------------------
-          RENDERER
----------------------------*/
-function renderStyles(filterCategory = "all") {
-  const container = $("#styleContainer");
-  container.html("");
-
-  let filtered = STYLE_DB;
-
-  if (filterCategory !== "all") {
-    filtered = STYLE_DB.filter(style =>
-      (style.category || "").toLowerCase() === filterCategory.toLowerCase()
-    );
-  }
-
-  filtered.forEach(style => {
-    const card = $(`
-      <div class="style-card bg-white dark:bg-neutral-800 rounded-2xl shadow-lg overflow-hidden 
-                  hover:scale-[1.02] transition-all duration-300 cursor-pointer 
-                  opacity-0 translate-y-4">
-
-        <img src="${style.img}" alt="${style.name}"
-             class="w-full h-60 object-cover bg-gray-200"
-             onerror="this.src='https://via.placeholder.com/400x500?text=No+Image';">
-
-        <div class="p-4">
-          <h3 class="text-xl font-semibold">${style.name}</h3>
-
-          ${
-            currentMode !== "minimal"
-              ? `<p class="text-sm text-gray-500 dark:text-gray-300 mt-1">${style.features}/p>`
-              : ""
-          }
-        </div>
-      </div>
-    `);
-
-    // Fade-in animation
-    setTimeout(() => {
-      card.css({ opacity: 1, transform: "translateY(0)" });
-    }, 80);
-
-    // On click → modal
-    card.on("click", function () {
-      showStyleModal(style);
+    // Show section helper
+    function showSection(id){
+      $('.section').addClass('hidden-section');
+      $('#'+id).removeClass('hidden-section');
+      setActiveNav(id);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // Initial: show home
+    showSection('home');
+
+    // Sidebar open/close
+    $('#openSidebar').on('click', ()=> $('#sidebar').addClass('open'));
+    $('#closeSidebar').on('click', ()=> $('#sidebar').removeClass('open'));
+    $('#sidebar').on('click', (e)=> { if(e.target.id==='sidebar') $('#sidebar').removeClass('open'); });
+
+    // Nav buttons (both sidebar and header)
+    $(document).on('click','.nav-btn', function(){
+      const t = $(this).data('target');
+      if(t) showSection(t);
+      $('#sidebar').removeClass('open');
     });
 
-    container.append(card);
-  });
-}
+    // Theme buttons
+    $('.theme-btn').on('click', function(){
+      const t = $(this).data('theme') || 'light';
+      document.body.className = 'theme-' + t;
+      localStorage.setItem('sm_theme', t);
+    });
+    // toggle theme quick
+    $('#themeToggle').on('click', function(){
+      const current = (document.body.className || '').replace('theme-','') || 'light';
+      const order = ['light','pinkblue','bluepurple','bluegreen','dark'];
+      let i = order.indexOf(current);
+      i = (i+1) % order.length;
+      const next = order[i];
+      document.body.className = 'theme-' + next;
+      localStorage.setItem('sm_theme', next);
+    });
 
-renderStyles();
+    // Explore styles CTA
+    $('#exploreStyles').on('click', ()=> showSection('style'));
 
+    /* ======= Step A: Outfit Recommender (enhanced) ======= */
+    function getOutfit(gender, skinTone, occasion){
+      // base mapping (kept simple but extensible)
+      const db = [
+        { cond: {gender:'male', skin:'sawo matang', occ:'kasual'}, val:{style:'Casual Streetwear', colors:['olive green','cream','denim'], outfit:'Kaos oversized, jeans biru, sneakers putih'} },
+        { cond: {gender:'female', skin:'putih', occ:'formal'}, val:{style:'Minimalist Formal', colors:['navy','beige','black'], outfit:'Blouse polos, midi skirt, heels netral'} },
+        { cond: {gender:'female', occ:'hangout'}, val:{style:'Chic Casual', colors:['pastel pink','white','denim'], outfit:'Crop top, high-waist jeans, sneakers putih'} },
+        { cond: {gender:'male', occ:'formal'}, val:{style:'Smart Modern', colors:['black','grey','white'], outfit:'Kemeja polos, trousers fit, sepatu kulit'} }
+      ];
+      for(let r of db){
+        const c = r.cond;
+        if((!c.gender || c.gender===gender) && (!c.skin || c.skin===skinTone) && (!c.occ || c.occ===occasion)) return r.val;
+      }
+      return { style:'Universal Style', colors:['white','black','grey'], outfit:'Outfit netral cocok untuk semua warna kulit' };
+    }
 
-/* --------------------------
-        MODAL DETAIL
----------------------------*/
-function showStyleModal(style) {
-  $("#modalTitle").text(style.name);
-  $("#modalImg").attr("src", style.img);
-  $("#modalFeature").text(style.features);
-  $("#modalFit").text(style.fit);
-  $("#modalColors").text(style.colors);
-  $("#modalItems").text(style.items);
+    $('#generateBtn').on('click', function(){
+      const gender = $('#gender').val();
+      const skin = $('#skinTone').val();
+      const occ = $('#occasion').val();
+      const place = $('#placeWhere').val();
+      const weather = $('#weatherWhere').val();
+      if(!gender || !skin || !occ){ alert('Lengkapi pilihan (gender, skin tone, occasion).'); return; }
+      const base = getOutfit(gender, skin, occ);
+      // adapt for weather & place
+      let outfit = base.outfit;
+      if(weather==='rain') outfit += ' + raincoat / waterproof';
+      if(weather==='cold') outfit += ' + coat & knit';
+      if(weather==='hot') outfit += ' + breathable linen';
+      if(place==='outdoor') outfit += ' (suitable outdoor)';
+      $('#styleResult').html('<strong>Gaya:</strong> '+base.style);
+      $('#colors').html('<strong>Warna cocok:</strong> '+base.colors.join(', '));
+      $('#outfit').html('<strong>Outfit:</strong> '+outfit);
+      $('#result').removeClass('hidden');
+      $('html,body').animate({scrollTop: $('#result').offset().top-80},300);
+    });
 
-  $("#styleModal").fadeIn(200);
-}
+    /* ======= Step B: Style Dictionary (JSON + render + modal) ======= */
+    const styleData = [
+      { name:'Streetwear', category:'street', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=900&q=60', desc:'Gaya kasual modern: hoodie, oversized, sneakers.', tags:['hangout','santai','youth'] },
+      { name:'Vintage Classic', category:'classic', img:'https://images.unsplash.com/photo-1503342217505-b0a15d3b5f8a?w=900&q=60', desc:'Nuansa retro dengan warna earthy dan siluet klasik.', tags:['retro','calm'] },
+      { name:'Korean Minimalist', category:'modern', img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=900&q=60', desc:'Siluet bersih, warna netral, rapi.', tags:['kuliah','office'] },
+      { name:'Elegant Formal', category:'elegant', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=900&q=60', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
+      { name:'Techwear', category:'street', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=900&q=60', desc:'Futuristik, banyak kantong, material waterproof.', tags:['outdoor','night'] }
+    ];
 
-$("#closeModal").on("click", function () {
-  $("#styleModal").fadeOut(200);
-});
-</script>
-<section id="style">
-<!-- MODE SWITCH -->
-<div class="text-center mb-6 flex justify-center gap-3">
-  <button id="modeMinimal" 
-      class="px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300">
-    Minimal
-  </button>
+    function renderGrid(filter='all'){
+      $('#styleGrid').hide().html('');
+      styleData.forEach((s,i)=>{
+        if(filter!=='all' && s.category!==filter) return;
+        const card = `<div class="card hover-raise cursor-pointer" role="button" data-index="${i}">
+          <img src="${s.img}" alt="${s.name}" class="w-full h-40 object-cover rounded mb-2">
+          <h4 class="font-semibold">${s.name}</h4>
+          <p class="text-sm text-gray-600">${s.desc.substring(0,70)}...</p>
+        </div>`;
+        $('#styleGrid').append(card);
+      });
+      $('#styleGrid').fadeIn(180);
+    }
+    renderGrid();
 
-  <button id="modeEditorial" 
-      class="px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300">
-    Editorial
-  </button>
+    $(document).on('click','.filter-btn', function(){
+      $('.filter-btn').removeClass('bg-blue-600 text-white').addClass('bg-gray-100').removeClass('text-white');
+      $(this).removeClass('bg-gray-100').addClass('bg-blue-600 text-white');
+      const f = $(this).data('filter') || 'all';
+      renderGrid(f);
+    });
 
-  <button id="modeHybrid" 
-      class="px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300">
-    Hybrid
-  </button>
-</div>
+    // open modal
+    $(document).on('click','#styleGrid [data-index]', function(){
+      const i = $(this).data('index');
+      const s = styleData[i];
+      $('#modalTitle').text(s.name);
+      $('#modalImg').attr('src', s.img).attr('alt', s.name);
+      $('#modalDesc').text(s.desc);
+      $('#modalTags').html(s.tags.map(t=>`<span class="chip">${t}</span>`).join(' '));
+      $('#styleModal').removeClass('hidden').addClass('modal-backdrop');
+    });
+    $('#closeModal').on('click', ()=> $('#styleModal').addClass('hidden').removeClass('modal-backdrop'));
+    $('#styleModal').on('click', function(e){ if(e.target.id==='styleModal') { $(this).addClass('hidden').removeClass('modal-backdrop'); }});
 
-<!-- STYLE GRID -->
-<div id="styleContainer"
-     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-6 max-w-6xl mx-auto">
-</div>
+    /* ======= Step C: Colour Harmony (palettes + chart + save) ======= */
+    const palettes = [
+      { id:'sunset', name:'Pink → Blue (Soft)', colors:['#ffb6da','#ffdff1','#c7ddff','#89a9ff'], desc:'Romantic pastel palette' },
+      { id:'violet', name:'Blue → Purple', colors:['#a9c7ff','#c3a6ff','#ecd9ff','#f6f0ff'], desc:'Cool & modern vibes' },
+      { id:'ocean', name:'Blue → Green', colors:['#8be8d4','#a4d8ff','#dff7ff','#eafbf7'], desc:'Fresh & natural' },
+      { id:'earth', name:'Warm Earth', colors:['#d6a77a','#b86b4a','#f3e8dc','#8b5e3c'], desc:'Terracotta & warm' },
+      { id:'mono', name:'Neutral Mono', colors:['#f8f9fa','#e9eef6','#cbd5e1','#9aa8b2'], desc:'Minimal clean' }
+    ];
+
+    function renderSwatches(){
+      $('#swatchGrid').html('');
+      palettes.forEach(p => {
+        const inner = `<div class="p-3 card cursor-pointer" data-id="${p.id}">
+          <div class="grid grid-cols-4 gap-1 mb-3">${p.colors.map(c=>`<div style="background:${c}" class="h-10 rounded"></div>`).join('')}</div>
+          <div class="font-semibold">${p.name}</div>
+          <div class="text-xs text-gray-600">${p.desc}</div>
+        </div>`;
+        $('#swatchGrid').append(inner);
+      });
+    }
+    renderSwatches();
+
+    // chart
+    let skinChart = null;
+    function initSkinChart(){
+      const ctx = document.getElementById('skinToneChart').getContext('2d');
+      skinChart = new Chart(ctx, {
+        type:'pie',
+        data:{labels:['Primary','Accent','Support','Neutral'], datasets:[{data:[40,25,20,15], backgroundColor:['#89a9ff','#c7ddff','#ffb6da','#f3e8dc']}]},
+        options:{responsive:true, plugins:{legend:{position:'bottom'}}}
+      });
+    }
+    initSkinChart();
+
+    $(document).on('click','#swatchGrid .card', function(){
+      const id = $(this).data('id');
+      const p = palettes.find(x=>x.id===id);
+      $('#selectedPalette').html(p.colors.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
+      $('#paletteInfo').text(p.desc);
+      // update chart
+      skinChart.data.datasets[0].backgroundColor = p.colors.slice(0,4);
+      skinChart.update();
+    });
+    $('#savePalette').on('click', function(){
+      const cols = $('#selectedPalette div').map((i,el)=>$(el).css('background-color')).get();
+      if(!cols.length){ alert('Pilih palette dulu'); return; }
+      localStorage.setItem('sm_palette', JSON.stringify(cols));
+      alert('Palette disimpan ke preferensi!');
+    });
+    // load saved palette
+    if(localStorage.getItem('sm_palette')){
+      const arr = JSON.parse(localStorage.getItem('sm_palette'));
+      $('#selectedPalette').html(arr.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
+    }
+
+    /* ======= Step E: Mix & Match (drag & drop) ======= */
+    const mixItems = [
+      { id:'t1', slot:'top', name:'White Tee', img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=60' },
+      { id:'t2', slot:'top', name:'Hoodie', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=800&q=60' },
+      { id:'b1', slot:'bottom', name:'Blue Jeans', img:'https://images.unsplash.com/photo-1520975912699-2b93c3e5f2f6?w=800&q=60' },
+      { id:'b2', slot:'bottom', name:'Cargo Pants', img:'https://images.unsplash.com/photo-1514996937319-344454492b37?w=800&q=60' },
+      { id:'s1', slot:'shoes', name:'Sneakers', img:'https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?w=800&q=60' },
+      { id:'a1', slot:'acc', name:'Beanie', img:'https://images.unsplash.com/photo-1542060743-8c6f389f1d9a?w=800&q=60' }
+    ];
+    function renderMixItems(){
+      $('#mixItems').html('');
+      mixItems.forEach(it=>{
+        const el = `<div draggable="true" data-id="${it.id}" data-slot="${it.slot}" class="card cursor-grab">
+          <img src="${it.img}" alt="${it.name}" class="w-full h-36 object-cover rounded mb-2" />
+          <div class="font-semibold">${it.name}</div><div class="text-xs text-gray-500">slot: ${it.slot}</div>
+        </div>`;
+        $('#mixItems').append(el);
+      });
+    }
+    renderMixItems();
+
+    // drag & drop
+    let dragData = null;
+    $(document).on('dragstart','[draggable="true"]', function(e){ dragData = { id: $(this).data('id'), slot: $(this).data('slot'), name: $(this).find('.font-semibold').text() }; });
+    $('.drop-slot').each(function(){
+      this.addEventListener('dragover', function(e){ e.preventDefault(); });
+      this.addEventListener('drop', function(e){
+        const target = $(this);
+        if(!dragData) return;
+        const slot = target.data('slot');
+        if(slot !== dragData.slot){ alert('Salah slot! Drop ke slot yang sesuai.'); return; }
+        target.find('.slot-val').text(dragData.name);
+        target.data('item', dragData.id);
+        dragData = null;
+      });
+    });
+    $('#saveOutfit').on('click', function(){
+      const out = {};
+      $('.drop-slot').each(function(){ out[$(this).data('slot')] = $(this).data('item') || null; });
+      localStorage.setItem('sm_savedOutfit', JSON.stringify(out));
+      alert('Outfit disimpan!');
+    });
+
+    /* ======= Step F: Vibe & Body Proportion ======= */
+    const vibeMap = {
+      cute:{desc:'Soft pastel, playful silhouettes', colors:['#ffd6e0','#ffdcae','#c7ddff']},
+      minimal:{desc:'Neutral tones, clean lines', colors:['#f8fafc','#cbd5e1','#9aa8b2']},
+      elegant:{desc:'Tailored, richer fabrics', colors:['#1f2937','#6b7280','#f3e8dc']},
+      cool:{desc:'Street/edgy pieces, monochrome', colors:['#0f172a','#334155','#89a9ff']},
+      cozy:{desc:'Layered knits, warm tones', colors:['#f7d6b3','#c6a78b','#eafbf7']},
+      street:{desc:'Casual urban, practical', colors:['#111827','#6b7280','#b8b8b8']}
+    };
+    $(document).on('click','.vibe-btn', function(){
+      const v = $(this).data('vibe');
+      const info = vibeMap[v];
+      $('#vibeResult').html(`<strong>${v.toUpperCase()}</strong><p class="text-sm">${info.desc}</p><div class="flex gap-2 mt-2">${info.colors.map(c=>`<div style="background:${c}" class="w-10 h-8 rounded"></div>`).join('')}</div>`);
+      localStorage.setItem('sm_lastVibe', v);
+    });
+
+    $('#calcBP').on('click', function(){
+      const h = parseFloat($('#bpHeight').val());
+      const w = parseFloat($('#bpWeight').val());
+      const shape = $('#bpShape').val();
+      if(!h || !w){ alert('Isi tinggi & berat dulu'); return; }
+      const bmi = (w / ((h/100)*(h/100))).toFixed(1);
+      let tips = `BMI: ${bmi}. Umum: pilih potongan yang seimbang dengan proporsimu. `;
+      if(h < 160) tips += 'Petite tips: high-waist & vertical lines untuk tampak lebih tinggi. ';
+      if(h >= 180) tips += 'Tall tips: coba cropped tops & belting untuk seimbangkan torso. ';
+      if(shape==='curvy') tips += 'Curvy tips: wrap dress & V-neck flattering. ';
+      $('#bpResult').text(tips);
+    });
+
+    /* ======= Step G: Weather, Budget, Quiz, Gacha ======= */
+    const weatherMap = {
+      sunny:'Kaos ringan, topi, kacamata hitam',
+      rain:'Hoodie + waterproof jacket, sepatu anti air',
+      cloudy:'Layering ringan, jaket tipis',
+      hot:'Atasan adem, celana pendek / linen',
+      cold:'Coat, knit, boots'
+    };
+    $('#weatherBtn').on('click', function(){
+      const w = $('#weatherSel').val(); const p = $('#placeSel').val();
+      if(!w || !p){ alert('Pilih cuaca & tempat dulu'); return; }
+      const r = weatherMap[w] + (p==='outdoor' ? ' (sesuaikan alas kaki outdoor)' : ' (pilih bahan nyaman)');
+      $('#weatherResult').text(r);
+    });
+
+    const budgetMap = {
+      '50-200':['Kaos basic (Rp 75k)','Socks/Accessories (Rp 50-100k)'],
+      '200-500':['Kemeja casual (Rp 250k)','Jeans murah (Rp 300k)','Sneakers midrange (Rp 450k)'],
+      '500-2000':['Blazer murah (Rp 700k)','Dress premium (Rp 1.2M)','Sepatu branded (Rp 900k)']
+    };
+    $('#budgetBtn').on('click', function(){
+      const b = $('#budgetSel').val(); if(!b){ alert('Pilih budget dulu'); return; }
+      $('#budgetResult').html(budgetMap[b].map(i=>`<div>• ${i}</div>`).join(''));
+    });
+
+    // Quiz
+    const quizQs = [
+      {q:'Warna favoritmu?', opts:['Pastel','Netral','Bold','Monochrome']},
+      {q:'Tujuan outfit?', opts:['Hangout','Formal','Kampus','Foto']},
+      {q:'Pilih item:', opts:['Dress/Skirt','Jeans','Oversized Tee','Tailored Blazer']},
+      {q:'Vibe yang kamu suka?', opts:['Cute','Minimal','Elegant','Street']},
+      {q:'Pola & Tekstur?', opts:['Plain','Floral','Denim','Leather']}
+    ];
+    function renderQuiz(){
+      $('#quizArea').html('');
+      quizQs.forEach((q,i)=>{
+        const html = `<div class="mb-3">
+          <div class="font-semibold">${i+1}. ${q.q}</div>
+          <div class="mt-2 grid grid-cols-2 gap-2">${q.opts.map(o=>`<button class="quiz-opt p-2 border rounded" data-q="${i}" data-val="${o}">${o}</button>`).join('')}</div>
+        </div>`;
+        $('#quizArea').append(html);
+      });
+      $('#quizArea').append('<button id="submitQuiz" class="mt-2 bg-green-600 text-white px-3 py-2 rounded">Submit Quiz</button>');
+    }
+    $('#startQuiz').on('click', function(){ renderQuiz(); $('html,body').animate({scrollTop: $('#quizArea').offset().top-80},300); });
+    let quizAnswers = {};
+    $(document).on('click','.quiz-opt', function(){
+      const q = $(this).data('q'), val = $(this).data('val');
+      quizAnswers[q] = val;
+      $(this).siblings().removeClass('bg-blue-600 text-white');
+      $(this).addClass('bg-blue-600 text-white');
+    });
+    $(document).on('click','#submitQuiz', function(){
+      const picks = Object.values(quizAnswers).join(' ');
+      let result = 'Soft Autumn Minimalist';
+      if(picks.includes('Bold') || picks.includes('Oversized')) result = 'Streetwear Bold';
+      if(picks.includes('Elegant') || picks.includes('Blazer')) result = 'Elegant Formal';
+      $('#quizArea').html(`<div class="p-4 rounded card"><strong>Hasil:</strong> ${result}<p class="mt-2 text-sm">Mulai dengan palette: Neutral + Accent.</p></div>`);
+    });
+
+    // Gacha
+    const outfits = [
+      {gender:'male', name:'Casual Weekend', items:['Tee','Jeans','Sneakers'], desc:'Casual tee + denim + sneakers'},
+      {gender:'female', name:'Date Night', items:['Blouse','Midi Skirt','Heels'], desc:'Soft blouse + midi skirt'},
+      {gender:'male', name:'Smart Modern', items:['Shirt','Trousers','Loafers'], desc:'Button-up + trousers'},
+      {gender:'female', name:'Korean Minimal', items:['Oversized Knit','Wide Pants','Sneakers'], desc:'Clean neutral look'}
+    ];
+    $('#gachaBtn').on('click', function(){
+      const g = $('#gachaGender').val(); if(!g){ alert('Pilih gender dulu'); return; }
+      const pool = outfits.filter(o=>o.gender===g); if(!pool.length){ $('#gachaResult').text('No outfit for this gender.'); return; }
+      const pick = pool[Math.floor(Math.random()*pool.length)];
+      $('#gachaResult').html(`<strong>${pick.name}</strong><div class="text-sm mt-1">${pick.desc}</div>`);
+    });
+
+    /* ======= small UX additions ======= */
+    // active nav on scroll (sections)
+    const sections = ['home','color','style','mixmatch','tools'];
+    $(window).on('scroll', function(){
+      const sTop = $(window).scrollTop() + 120;
+      for(let id of sections){
+        const el = $('#'+id);
+        if(el.length){
+          const top = el.offset().top, h = el.outerHeight();
+          if(sTop >= top && sTop < top + h){ setActiveNav(id); break; }
+        }
+      }
+    });
+
+    // ensure chart resized when tab shown
+    $(document).on('click', '[data-target="color"]', function(){ setTimeout(()=> { if(skinChart) skinChart.resize(); },300); });
+
+    // load saved theme/palette/outfit
+    if(localStorage.getItem('sm_savedOutfit')){
+      // populate drop slots summary
+      const saved = JSON.parse(localStorage.getItem('sm_savedOutfit'));
+      $('.drop-slot').each(function(){ const s=$(this).data('slot'); if(saved[s]) $(this).find('.slot-val').text(saved[s]); });
+    }
+
+    // tiny animation: hover raise already applied via class hover-raise
+    // done with IIFE
+  })();
+  </script>
 </body>
-<div id="styleModal"
-     class="fixed inset-0 bg-black/60 hidden justify-center items-center p-4 backdrop-blur-sm">
-
-  <div class="bg-white dark:bg-neutral-900 p-6 rounded-2xl shadow-2xl max-w-xl w-full relative">
-  
-    <button id="closeModal" 
-            class="absolute right-4 top-4 text-xl font-bold hover:text-pink-500">✕</button>
-
-    <img id="modalImg" class="w-full h-72 object-cover rounded-xl mb-4">
-
-    <h2 id="modalTitle" class="text-2xl font-bold mb-2"></h2>
-
-    <p><strong>Features:</strong> <span id="modalFeature"></span></p>
-    <p><strong>Suitable Body Types:</strong> <span id="modalFit"></span></p>
-    <p><strong>Best Colors:</strong> <span id="modalColors"></span></p>
-    <p><strong>Common Items:</strong> <span id="modalItems"></span></p>
-  </div>
-</div>
-<script>
-/* =========================================================
-      PHASE 6 — PART 1
-      COLOUR HARMONY 2.0 DATABASE
-========================================================= */
-
-const COLOR_DB = [
-  {
-    name: "Soft Pink",
-    hex: "#F7C9D4",
-    tones: ["putih", "kuning langsat"],
-    vibes: ["cute", "soft", "romantic"],
-    styles: ["Soft Girl", "Romantic", "Korean Look"]
-  },
-  {
-    name: "Olive Green",
-    hex: "#7A8E69",
-    tones: ["sawo matang", "gelap"],
-    vibes: ["earthy", "vintage"],
-    styles: ["Gorpcore", "Vintage", "Boho"]
-  },
-  {
-    name: "Terracotta",
-    hex: "#C56A42",
-    tones: ["sawo matang", "gelap"],
-    vibes: ["warm", "earthy"],
-    styles: ["Boho", "Vintage", "Old Money"]
-  },
-  {
-    name: "Soft Blue",
-    hex: "#A9C8FF",
-    tones: ["putih"],
-    vibes: ["clean", "cool", "minimal"],
-    styles: ["Minimalist", "Clean Fit", "Korean Look"]
-  },
-  {
-    name: "Lavender",
-    hex: "#C7B7FF",
-    tones: ["putih", "kuning langsat"],
-    vibes: ["cute", "fantasy"],
-    styles: ["Soft Girl", "Romantic", "Light Academia"]
-  },
-  {
-    name: "Navy",
-    hex: "#182A4E",
-    tones: ["putih", "gelap"],
-    vibes: ["formal", "cool"],
-    styles: ["Old Money", "Elegant Chic", "Minimalist"]
-  },
-  {
-    name: "Cream",
-    hex: "#F0E9D2",
-    tones: ["semua"],
-    vibes: ["soft", "minimal"],
-    styles: ["Clean Fit", "Light Academia", "Korean Look"]
-  },
-  {
-    name: "Deep Burgundy",
-    hex: "#4A001F",
-    tones: ["sawo matang", "gelap"],
-    vibes: ["dark", "elegant"],
-    styles: ["Dark Academia", "Elegant Chic"]
-  },
-  {
-    name: "Sky Blue",
-    hex: "#9EDBFF",
-    tones: ["putih", "kuning langsat"],
-    vibes: ["fresh", "minimal"],
-    styles: ["Minimalist", "Clean Fit", "Korean Look"]
-  },
-  {
-    name: "Moss Green",
-    hex: "#556B2F",
-    tones: ["gelap", "sawo matang"],
-    vibes: ["earthy"],
-    styles: ["Gorpcore", "Vintage"]
-  }
-];
-</script>
+</html>
