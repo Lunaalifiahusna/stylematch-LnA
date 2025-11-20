@@ -33,7 +33,7 @@
     header.site-header{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter: blur(8px);border-bottom:1px solid rgba(0,0,0,0.06)}
     header.site-header .desktop-nav .nav-btn{color:var(--text)}
     .nav-btn.active{color:var(--card); background:var(--accent); padding:.35rem .6rem; border-radius:.5rem}
-    a.cta{background:var(--accent); color:#fff; padding:.65rem 1rem; border-radius:.6rem; display:inline-block; text-decoration:none}
+    a.cta{background:var(--accent); color:#fff; padding:.65rem 1rem; border-radius:.6rem; display:inline-block; text-decoration:none; cursor: pointer;}
     /* Sidebar */
     #sidebar{position:fixed;left:-340px;top:0;height:100vh;width:320px;background:var(--card);z-index:80;box-shadow:10px 0 40px rgba(2,6,23,0.12);transition:left .32s;padding:1rem;overflow:auto}
     #sidebar.open{left:0}
@@ -129,6 +129,7 @@
           <p class="text-muted mb-4">Rekomendasi outfit, colour harmony, style dictionary, mix & match, dan fitur lainnya — sekarang dengan palette & vibe lebih kaya serta pengalaman dark theme yang lebih nyaman.</p>
           <div class="flex flex-wrap gap-3">
             <a href="#home" class="cta">Mulai Sekarang</a>
+            
             <button id="exploreStyles" class="chip">Lihat Style Dictionary</button>
             <button id="tryPalette" class="chip">Jelajahi Colour Harmony</button>
           </div>
@@ -391,7 +392,8 @@
       $('.section').addClass('hidden-section');
       $('#'+id).removeClass('hidden-section');
       setActiveNav(id);
-      window.scrollTo({top:0,behavior:'smooth'});
+      // window.scrollTo removal to handle custom scroll animation for buttons
+      // window.scrollTo({top:0,behavior:'smooth'}); 
     }
 
     // Initial: show home
@@ -405,8 +407,28 @@
     // Nav buttons (both sidebar and header)
     $(document).on('click','.nav-btn', function(){
       const t = $(this).data('target');
-      if(t) showSection(t);
+      if(t) {
+        showSection(t);
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
       $('#sidebar').removeClass('open');
+    });
+
+    // MODIFIKASI UTAMA DI SINI: Handle tombol Mulai Sekarang / CTA
+    // Memastikan tombol 'Start' atau 'Mulai Sekarang' membuka tab Home dan scroll ke section "Temukan Gaya"
+    $('.cta').on('click', function(e){
+      e.preventDefault(); // Mencegah default anchor jump
+      
+      // 1. Pastikan section Home aktif (hapus hidden-section)
+      showSection('home');
+      
+      // 2. Scroll halus ke elemen judul "Temukan Gaya yang Cocok Untukmu" (h2 di dalam #home)
+      const target = $('#home h2');
+      if(target.length){
+        $('html,body').animate({
+          scrollTop: target.offset().top - 120 // Offset sedikit agar tidak tertutup header
+        }, 500);
+      }
     });
 
     // Theme buttons
@@ -427,8 +449,8 @@
     });
 
     // Explore styles CTA
-    $('#exploreStyles').on('click', ()=> showSection('style'));
-    $('#tryPalette').on('click', ()=> showSection('color'));
+    $('#exploreStyles').on('click', ()=> { showSection('style'); window.scrollTo({top:0,behavior:'smooth'}); });
+    $('#tryPalette').on('click', ()=> { showSection('color'); window.scrollTo({top:0,behavior:'smooth'}); });
 
     /* ======= Step A: Outfit Recommender (enhanced) ======= */
     function getOutfit(gender, skinTone, occasion){
@@ -741,7 +763,7 @@
         const el = $('#'+id);
         if(el.length){
           const top = el.offset().top, h = el.outerHeight();
-          if(sTop >= top && sTop < top + h){ setActiveNav(id); break; }
+          // if(sTop >= top && sTop < top + h){ setActiveNav(id); break; }
         }
       }
     });
