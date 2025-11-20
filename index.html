@@ -136,7 +136,7 @@
         </div>
         <div class="p-6 flex items-center justify-center">
           <div class="hero-media">
-            <img src="https://via.placeholder.com/1400x800/81C784/ffffff?text=HERO+IMAGE" alt="hero outfit modern" class="w-full h-full object-cover" />
+            <img src="beranda.jpg" alt="hero outfit modern" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
@@ -473,13 +473,13 @@
     /* ======= Step B: Style Dictionary (JSON + render + modal) ======= */
     const styleData = [
       // URL Gambar Diperbarui ke Placeholder Universal
-      { name:'Streetwear', category:'street', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=STREETWEAR', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
-      { name:'Vintage Classic', category:'classic', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=VINTAGE+CLASSIC', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm'] },
-      { name:'Korean Minimalist', category:'modern', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=KOREAN+MINIMALIST', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
-      { name:'Elegant Formal', category:'elegant', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=ELEGANT+FORMAL', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
-      { name:'Techwear', category:'street', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=TECHWEAR', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
-      { name:'Soft Romantic', category:'minimal', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=SOFT+ROMANTIC', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
-      { name:'Monochrome Chic', category:'modern', img:'https://via.placeholder.com/900x500/ADD8E6/ffffff?text=MONOCHROME+CHIC', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] }
+      { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
+      { name:'Vintage Classic', category:'classic', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm'] },
+      { name:'Korean Minimalist', category:'modern', img:'kor.jpeg', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
+      { name:'Elegant Formal', category:'elegant', img:'elfor.jpeg', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
+      { name:'Techwear', category:'street', img:'tech.jpeg', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
+      { name:'Soft Romantic', category:'minimal', img:'sorom.jpeg', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
+      { name:'Monochrome Chic', category:'modern', img:'mmn.jpeg', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] }
     ];
 
     function renderGrid(filter='all'){
@@ -586,12 +586,12 @@
     /* ======= Step E: Mix & Match (drag & drop) ======= */
     const mixItems = [
       // URL Gambar Diperbarui ke Placeholder Universal
-      { id:'t1', slot:'top', name:'White Tee', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=WHITE+TEE' },
-      { id:'t2', slot:'top', name:'Hoodie', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=HOODIE' },
-      { id:'b1', slot:'bottom', name:'Blue Jeans', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=BLUE+JEANS' },
-      { id:'b2', slot:'bottom', name:'Cargo Pants', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=CARGO+PANTS' },
-      { id:'s1', slot:'shoes', name:'Sneakers', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=SNEAKERS' },
-      { id:'a1', slot:'acc', name:'Beanie', img:'https://via.placeholder.com/800x600/FFB6C1/ffffff?text=BEANIE' }
+      { id:'t1', slot:'top', name:'White Tee', img:'whitetee.jpg' },
+      { id:'t2', slot:'top', name:'Hoodie', img:'hoodie.jpg' },
+      { id:'b1', slot:'bottom', name:'Blue Jeans', img:'bluej.jpg' },
+      { id:'b2', slot:'bottom', name:'Cargo Pants', img:'cargo.jpg' },
+      { id:'s1', slot:'shoes', name:'Sneakers', img:'Sneakers.jpg' },
+      { id:'a1', slot:'acc', name:'Beanie', img:'beanie.jpg' }
     ];
     function renderMixItems(){
       $('#mixItems').html('');
