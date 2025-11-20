@@ -414,19 +414,14 @@
       $('#sidebar').removeClass('open');
     });
 
-    // MODIFIKASI UTAMA DI SINI: Handle tombol Mulai Sekarang / CTA
-    // Memastikan tombol 'Start' atau 'Mulai Sekarang' membuka tab Home dan scroll ke section "Temukan Gaya"
+    // Handle tombol Mulai Sekarang / CTA
     $('.cta').on('click', function(e){
       e.preventDefault(); // Mencegah default anchor jump
-      
-      // 1. Pastikan section Home aktif (hapus hidden-section)
       showSection('home');
-      
-      // 2. Scroll halus ke elemen judul "Temukan Gaya yang Cocok Untukmu" (h2 di dalam #home)
       const target = $('#home h2');
       if(target.length){
         $('html,body').animate({
-          scrollTop: target.offset().top - 120 // Offset sedikit agar tidak tertutup header
+          scrollTop: target.offset().top - 120 
         }, 500);
       }
     });
@@ -454,14 +449,12 @@
 
     /* ======= Step A: Outfit Recommender (enhanced) ======= */
     function getOutfit(gender, skinTone, occasion){
-      // more extensive mapping with skin-tone-aware palettes and multiple options
       const db = [
         { cond: {gender:'female', skin:'light', occ:'formal'}, val:{style:'Minimalist Formal', colors:['navy','beige','soft black'], outfit:'Blouse polos, midi skirt, heels netral', samples:['Blouse putih + midi beige','Navy blazer + skirt krem']} },
         { cond: {gender:'female', skin:'medium', occ:'hangout'}, val:{style:'Chic Casual', colors:['dusty pink','denim','off-white'], outfit:'Crop top, high-waist jeans, sneakers putih', samples:['Crop top dusty pink + denim'] } },
         { cond: {gender:'male', skin:'medium', occ:'casual'}, val:{style:'Casual Streetwear', colors:['olive','cream','denim'], outfit:'Kaos oversized, jeans biru, sneakers putih', samples:['Oversized tee + cargo pants']} },
         { cond: {gender:'male', occ:'formal'}, val:{style:'Smart Modern', colors:['black','grey','white'], outfit:'Kemeja polos, trousers fit, sepatu kulit', samples:['Grey suit + white shirt']} },
       ];
-      // try to match best
       for(let r of db){
         const c = r.cond;
         if((!c.gender || c.gender===gender) && (!c.skin || c.skin===skinTone) && (!c.occ || c.occ===occasion)) return r.val;
@@ -477,7 +470,6 @@
       const weather = $('#weatherWhere').val();
       if(!gender || !skin || !occ){ alert('Lengkapi pilihan (gender, skin tone, occasion).'); return; }
       const base = getOutfit(gender, skin, occ);
-      // adapt for weather & place
       let outfit = base.outfit;
       if(weather==='rain') outfit += ' + raincoat / waterproof';
       if(weather==='cold') outfit += ' + coat & knit';
@@ -486,22 +478,22 @@
       $('#styleResult').html('<strong>Gaya:</strong> '+base.style);
       $('#colors').html('<strong>Warna cocok:</strong> '+base.colors.join(', '));
       $('#outfit').html('<strong>Outfit:</strong> '+outfit);
-      // show samples (visual suggestions)
       $('#suggestions').html((base.samples || []).map(s=>`<div class="p-3 rounded border muted">${s}</div>`).join(''));
       $('#result').removeClass('hidden');
       $('html,body').animate({scrollTop: $('#result').offset().top-80},300);
     });
 
-    /* ======= Step B: Style Dictionary (JSON + render + modal) ======= */
+    /* ======= Step B: Style Dictionary (MODIFIED) ======= */
     const styleData = [
-      // URL Gambar Diperbarui ke Placeholder Universal
       { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
-      { name:'Vintage Classic', category:'classic', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm'] },
+      { name:'Vintage Classic', category:'retro', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm','classic'] },
       { name:'Korean Minimalist', category:'modern', img:'kor.jpeg', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
       { name:'Elegant Formal', category:'elegant', img:'elfor.jpeg', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
       { name:'Techwear', category:'street', img:'tech.jpeg', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
       { name:'Soft Romantic', category:'minimal', img:'sorom.jpeg', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
-      { name:'Monochrome Chic', category:'modern', img:'mmn.jpeg', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] }
+      { name:'Monochrome Chic', category:'modern', img:'mmn.jpeg', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] },
+      { name:'Preppy Style', category:'classic', img:'prep.jpeg', desc:'Kesan bersih, teratur, dan berkelas. Polo shirt, kemeja Oxford, sweater rajut, blazer dengan lambang, celana khaki, loafers.', tags:['clean','campus','formal'] },
+      { name:'Bohemian (Boho)', category:'retro', img:'boho.jpeg', desc:'Gaya yang bebas, artistik, dan terinspirasi dari alam atau budaya hippies. Mengutamakan tekstur dan motif etnik. Pakaian longgar, renda, sulaman.', tags:['art','nature','floral'] }
     ];
 
     function renderGrid(filter='all'){
@@ -531,7 +523,6 @@
       const i = $(this).data('index');
       const s = styleData[i];
       $('#modalTitle').text(s.name);
-      // Memastikan URL gambar untuk modal juga diperbarui
       $('#modalImg').attr('src', s.img).attr('alt', s.name);
       $('#modalDesc').text(s.desc);
       $('#modalTags').html(s.tags.map(t=>`<span class="chip">${t}</span>`).join(' '));
@@ -540,7 +531,7 @@
     $('#closeModal').on('click', ()=> $('#styleModal').addClass('hidden').removeClass('modal-backdrop'));
     $('#styleModal').on('click', function(e){ if(e.target.id==='styleModal') { $(this).addClass('hidden').removeClass('modal-backdrop'); }});
 
-    /* ======= Step C: Colour Harmony (palettes + chart + save) ======= */
+    /* ======= Step C: Colour Harmony ======= */
     const palettes = [
       { id:'sunset', name:'Soft Sunset', colors:['#FFB6DA','#FFD1E8','#C7DDFF','#89A9FF'], desc:'Romantic pastel palette — soft pink ke biru' },
       { id:'violet', name:'Blue → Purple', colors:['#A9C7FF','#C3A6FF','#ECD9FF','#F6F0FF'], desc:'Cool & modern vibes' },
@@ -581,7 +572,6 @@
       const p = palettes.find(x=>x.id===id);
       $('#selectedPalette').html(p.colors.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
       $('#paletteInfo').text(p.desc);
-      // update chart
       skinChart.data.datasets[0].backgroundColor = p.colors.slice(0,4);
       skinChart.update();
     });
@@ -591,30 +581,61 @@
       localStorage.setItem('sm_palette', JSON.stringify(cols));
       alert('Palette disimpan ke preferensi!');
     });
-    // apply palette to recommender
     $('#applyToRecommender').on('click', function(){
       const cols = JSON.parse(localStorage.getItem('sm_palette') || '[]');
       if(!cols.length){ alert('Tidak ada palette tersimpan. Pilih dan simpan terlebih dahulu.'); return; }
-      // Simple UX: show first color as suggestion in result area
       $('#colors').html('<strong>Warna pilih (applied):</strong> ' + cols.join(', '));
       alert('Palette diterapkan ke rekomendasi (sementara).');
     });
-    // load saved palette
     if(localStorage.getItem('sm_palette')){
       const arr = JSON.parse(localStorage.getItem('sm_palette'));
       $('#selectedPalette').html(arr.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
     }
 
-    /* ======= Step E: Mix & Match (drag & drop) ======= */
+    /* ======= Step E: Mix & Match (drag & drop) (UPDATED) ======= */
+    // MODIFIKASI: Menambahkan item baru sesuai permintaan tanpa menghapus item lama
     const mixItems = [
-      // URL Gambar Diperbarui ke Placeholder Universal
+      // Item Lama
       { id:'t1', slot:'top', name:'White Tee', img:'whitetee.jpg' },
       { id:'t2', slot:'top', name:'Hoodie', img:'hoodie.jpg' },
       { id:'b1', slot:'bottom', name:'Blue Jeans', img:'bluej.jpg' },
       { id:'b2', slot:'bottom', name:'Cargo Pants', img:'cargo.jpg' },
       { id:'s1', slot:'shoes', name:'Sneakers', img:'Sneakers.jpg' },
-      { id:'a1', slot:'acc', name:'Beanie', img:'beanie.jpg' }
+      { id:'a1', slot:'acc', name:'Beanie', img:'beanie.jpg' },
+      
+      // Item Baru - Tops
+      { id:'t3', slot:'top', name:'Kemeja Oxford', img:'keem.jpg' },
+      { id:'t4', slot:'top', name:'Blouse Sutra', img:'blouse.jpg' },
+      { id:'t5', slot:'top', name:'Sweater / Knit', img:'swea.jpg' },
+      { id:'t6', slot:'top', name:'Denim Shirt', img:'https://via.placeholder.com/300/bfdbfe/1d4ed8?text=Denim+Shirt' },
+      { id:'t7', slot:'top', name:'Turtle Neck', img:'https://via.placeholder.com/300/1e293b/ffffff?text=Turtle+Neck' },
+
+      // Item Baru - Bottoms
+      { id:'b3', slot:'bottom', name:'Tailored Trousers', img:'https://via.placeholder.com/300/334155/ffffff?text=Tailored+Pants' },
+      { id:'b4', slot:'bottom', name:'Pleated Skirt', img:'https://via.placeholder.com/300/f1f5f9/475569?text=Pleated+Skirt' },
+      { id:'b5', slot:'bottom', name:'Chinos / Khaki', img:'https://via.placeholder.com/300/fef3c7/b45309?text=Chinos' },
+      { id:'b6', slot:'bottom', name:'Leather Skirt', img:'https://via.placeholder.com/300/000000/ffffff?text=Leather+Skirt' },
+      { id:'b7', slot:'bottom', name:'Jogger Pants', img:'https://via.placeholder.com/300/d1d5db/374151?text=Joggers' },
+
+      // Item Baru - Shoes
+      { id:'s2', slot:'shoes', name:'Clean White Sneakers', img:'https://via.placeholder.com/300/ffffff/000000?text=White+Sneakers' },
+      { id:'s3', slot:'shoes', name:'Loafers', img:'https://via.placeholder.com/300/573020/ffffff?text=Loafers' },
+      { id:'s4', slot:'shoes', name:'Ankle Boots', img:'https://via.placeholder.com/300/1f2937/ffffff?text=Ankle+Boots' },
+      { id:'s5', slot:'shoes', name:'Heeled Pumps', img:'https://via.placeholder.com/300/be185d/ffffff?text=Heeled+Pumps' },
+
+      // Item Baru - Accessories
+      { id:'a2', slot:'acc', name:'Tote Bag', img:'https://via.placeholder.com/300/f5f5f4/78716c?text=Tote+Bag' },
+      { id:'a3', slot:'acc', name:'Belt', img:'https://via.placeholder.com/300/292524/ffffff?text=Belt' },
+      { id:'a4', slot:'acc', name:'Scarf', img:'https://via.placeholder.com/300/fbcfe8/be185d?text=Scarf' },
+      { id:'a5', slot:'acc', name:'Necklace', img:'https://via.placeholder.com/300/ffedd5/9a3412?text=Necklace' },
+      { id:'a6', slot:'acc', name:'Wristwatch', img:'https://via.placeholder.com/300/e5e7eb/374151?text=Watch' },
+      { id:'a7', slot:'acc', name:'Bracelet', img:'https://via.placeholder.com/300/ede9fe/6d28d9?text=Bracelet' },
+      { id:'a8', slot:'acc', name:'Sunglasses', img:'https://via.placeholder.com/300/171717/ffffff?text=Sunglasses' },
+      { id:'a9', slot:'acc', name:'Ring', img:'https://via.placeholder.com/300/fef9c3/ca8a04?text=Ring' },
+      { id:'a10', slot:'acc', name:'Earring', img:'https://via.placeholder.com/300/fae8ff/86198f?text=Earring' },
+      { id:'a11', slot:'acc', name:'Headband', img:'https://via.placeholder.com/300/ffe4e6/be123c?text=Headband' }
     ];
+    
     function renderMixItems(){
       $('#mixItems').html('');
       mixItems.forEach(it=>{
@@ -627,7 +648,6 @@
     }
     renderMixItems();
 
-    // drag & drop
     let dragData = null;
     $(document).on('dragstart','[draggable="true"]', function(e){ dragData = { id: $(this).data('id'), slot: $(this).data('slot'), name: $(this).find('.font-semibold').text() }; });
     $('.drop-slot').each(function(){
@@ -693,7 +713,7 @@
       $('#weatherResult').text(r);
     });
 
-    // Quiz (improved: mapping more nuanced result + palette suggestions)
+    // Quiz
     const quizQs = [
       {q:'Warna favoritmu?', opts:['Pastel','Netral','Bold','Monochrome']},
       {q:'Tujuan outfit?', opts:['Hangout','Formal','Kampus','Foto']},
@@ -722,7 +742,6 @@
     });
     $(document).on('click','#submitQuiz', function(){
       const picks = Object.values(quizAnswers).join(' ');
-      // more nuanced heuristics
       let result = 'Soft Autumn Minimalist';
       let palette = 'mono';
       if(picks.includes('Bold') || picks.includes('Oversized')) { result = 'Streetwear Bold'; palette='bold'; }
@@ -730,7 +749,6 @@
       if(picks.includes('Pastel') && picks.includes('Cute')) { result = 'Soft Romantic'; palette='sunset'; }
       if(picks.includes('Monochrome')) { result = 'Monochrome Chic'; palette='mono'; }
       $('#quizArea').html(`<div class="p-4 rounded card"><strong>Hasil:</strong> ${result}<p class="mt-2 text-sm muted">Saran palette: ${palette}. Coba lihat Colour Harmony untuk contoh kombinasi.</p></div>`);
-      // preselect palette in UI if available
       const selPal = palettes.find(p=>p.id===palette);
       if(selPal){
         $('#selectedPalette').html(selPal.colors.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
@@ -754,8 +772,7 @@
       $('#gachaResult').html(`<strong>${pick.name}</strong><div class="text-sm mt-1 muted">${pick.desc}</div>`);
     });
 
-    /* ======= small UX additions & accessibility ======= */
-    // active nav on scroll (sections)
+    // Scroll sync nav
     const sections = ['home','color','style','mixmatch','tools'];
     $(window).on('scroll', function(){
       const sTop = $(window).scrollTop() + 120;
@@ -768,19 +785,14 @@
       }
     });
 
-    // ensure chart resized when tab shown
     $(document).on('click', '[data-target="color"]', function(){ setTimeout(()=> { if(skinChart) skinChart.resize(); },300); });
 
-    // load saved theme/palette/outfit
     if(localStorage.getItem('sm_savedOutfit')){
       const saved = JSON.parse(localStorage.getItem('sm_savedOutfit'));
       $('.drop-slot').each(function(){ const s=$(this).data('slot'); if(saved[s]) $(this).find('.slot-val').text(saved[s]); });
     }
-
-    // A11y: keyboard nav for sidebar close
     $(document).on('keydown', function(e){ if(e.key === 'Escape'){ $('#sidebar').removeClass('open'); $('#styleModal').addClass('hidden').removeClass('modal-backdrop'); } });
 
-    // polish done
   })();
   </script>
 </body>
