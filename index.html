@@ -15,13 +15,13 @@
     /* --- ROOT VARIABLES & THEMES --- */
     :root{
       --bg: linear-gradient(180deg,#f8fafc,#e6eefc);
-      --text: #334155; /* Slate 700 for better readability than pure black */
+      --text: #334155; 
       --card: #ffffff;
       --accent: #2563eb;
       --muted: #64748b;
       --glass: rgba(255,255,255,0.75);
       --border: #e2e8f0;
-      --bg-inner: #f1f5f9; /* Pengganti bg-gray-100 */
+      --bg-inner: #f1f5f9; 
     }
 
     /* Theme: Light */
@@ -38,14 +38,14 @@
 
     /* Theme: Dark (Fixed Contrast) */
     .theme-dark { 
-      --bg: linear-gradient(180deg,#0f172a,#1e293b); /* Darker/Richer background */
-      --text:#f1f5f9; /* Almost white */
-      --card:#1e293b; /* Slate 800 */
-      --accent:#818cf8; /* Indigo 400 - softer for dark mode */
-      --muted:#94a3b8; /* Slate 400 */
+      --bg: linear-gradient(180deg,#0f172a,#1e293b); 
+      --text:#f1f5f9; 
+      --card:#1e293b; 
+      --accent:#818cf8; 
+      --muted:#94a3b8; 
       --glass: rgba(30, 41, 59, 0.8);
       --border: #334155;
-      --bg-inner: #334155; /* Lighter than card for contrast */
+      --bg-inner: #334155; 
     }
 
     /* Theme: Pink-Blue */
@@ -90,7 +90,7 @@
       font-family:"Plus Jakarta Sans",system-ui,-apple-system; 
       margin:0; 
       background:var(--bg); 
-      color:var(--text); /* KUNCI: Semua text default mengikuti ini */
+      color:var(--text); 
       transition:background .28s, color .28s; 
       -webkit-font-smoothing:antialiased; 
       -moz-osx-font-smoothing:grayscale;
@@ -387,60 +387,84 @@
       <article class="card">
         <h2 class="text-2xl font-semibold text-accent">Tools</h2>
         <div class="grid md:grid-cols-3 gap-4 mt-4">
-          <div class="card bg-inner">
+          
+          <div class="card bg-inner border border-adaptive">
             <h3 class="font-semibold">What Vibes Are You?</h3>
-            <div class="mt-3 grid grid-cols-2 gap-2">
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cute">Cute</button>
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="minimal">Minimal</button>
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="elegant">Elegant</button>
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cool">Cool</button>
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cozy">Cozy</button>
-              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="street">Street</button>
+            <p class="text-xs muted mb-2">Pilih vibe untuk melihat palet warna & style rekomendasi.</p>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="cute">Cute</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="minimal">Minimal</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="elegant">Elegant</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="cool">Cool</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="cozy">Cozy</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="street">Street</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="retro">Retro</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="sporty">Sporty</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="academia">Academia</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="boho">Boho</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive hover:bg-inner transition" data-vibe="artsy">Artsy</button>
             </div>
-            <div id="vibeResult" class="mt-3 text-sm muted"></div>
+            <div id="vibeResult" class="mt-4 text-sm p-3 rounded bg-card border border-adaptive hidden"></div>
           </div>
-          <div class="card bg-inner">
-            <h3 class="font-semibold">Body Proportion Helper</h3>
-            <input id="bpHeight" type="number" placeholder="Tinggi (cm)" class="w-full p-2 mb-2 bg-card" />
-            <input id="bpWeight" type="number" placeholder="Berat (kg)" class="w-full p-2 mb-2 bg-card" />
-            <select id="bpShape" class="w-full p-2 mb-2 bg-card">
-              <option value="">Pilih bentuk tubuh (opsional)</option>
-              <option value="petite">Petite</option>
-              <option value="tall">Tall</option>
-              <option value="curvy">Curvy</option>
-              <option value="slim">Slim</option>
-            </select>
-            <button id="calcBP" class="mt-1 w-full cta-btn">Dapatkan Tips</button>
-            <div id="bpResult" class="mt-3 text-sm muted"></div>
+
+          <div class="card bg-inner border border-adaptive">
+            <h3 class="font-semibold">Personal Shape Consultant</h3>
+            <p class="text-xs muted mb-3">Analisis bentuk tubuh untuk saran outfit terbaik.</p>
+            
+            <div class="mb-2">
+              <label class="text-xs font-bold">Tinggi (cm)</label>
+              <input id="bpHeight" type="number" placeholder="160" class="w-full p-2 mt-1 bg-card" />
+            </div>
+            <div class="mb-2">
+              <label class="text-xs font-bold">Berat (kg)</label>
+              <input id="bpWeight" type="number" placeholder="55" class="w-full p-2 mt-1 bg-card" />
+            </div>
+            <div class="mb-3">
+              <label class="text-xs font-bold">Bentuk Tubuh (Paling Dominan)</label>
+              <select id="bpShape" class="w-full p-2 mt-1 bg-card">
+                <option value="">-- Pilih Bentuk --</option>
+                <option value="pear">Pear (Pinggul Lebar)</option>
+                <option value="apple">Apple (Bagian Tengah Berisi)</option>
+                <option value="hourglass">Hourglass (Proporsional)</option>
+                <option value="rectangle">Rectangle (Lurus/Athletic)</option>
+                <option value="inverted_triangle">Inverted Triangle (Bahu Lebar)</option>
+              </select>
+            </div>
+            
+            <button id="calcBP" class="mt-1 w-full cta-btn">Dapatkan Konsultasi</button>
+            <div id="bpResult" class="mt-3 text-sm"></div>
           </div>
+
           <div class="space-y-4">
-            <div class="card bg-inner">
+            <div class="card bg-inner border border-adaptive">
               <h3 class="font-semibold">Outfit Weather Match</h3>
               <select id="weatherSel" class="w-full p-2 mt-2 bg-card">
                 <option value="">Pilih Cuaca</option>
-                <option value="sunny">Cerah</option>
-                <option value="rain">Hujan</option>
-                <option value="cloudy">Mendung</option>
-                <option value="hot">Terik</option>
-                <option value="cold">Dingin</option>
+                <option value="sunny">Cerah / Panas</option>
+                <option value="rain">Hujan / Basah</option>
+                <option value="cloudy">Mendung / Berangin</option>
+                <option value="hot">Terik Matahari</option>
+                <option value="cold">Dingin / AC</option>
               </select>
               <select id="placeSel" class="w-full p-2 mt-2 bg-card">
                 <option value="">Indoor / Outdoor?</option>
                 <option value="indoor">Indoor</option>
                 <option value="outdoor">Outdoor</option>
               </select>
-              <button id="weatherBtn" class="mt-2 w-full cta-btn">Lihat Rekomendasi</button>
-              <div id="weatherResult" class="mt-2 text-sm muted"></div>
+              <button id="weatherBtn" class="mt-2 w-full cta-btn">Lihat Opsi Outfit</button>
+              <div id="weatherResult" class="mt-3 text-sm hidden"></div>
             </div>
-            <div class="card bg-inner">
-              <h3 class="font-semibold">Outfit Randomizer</h3>
-              <select id="gachaGender" class="w-full p-2 mt-2 bg-card">
+
+            <div class="card bg-inner border border-adaptive">
+              <h3 class="font-semibold">Outfit Gacha (Randomizer)</h3>
+              <p class="text-xs muted mb-2">Bosan? Biarkan takdir memilihkan outfitmu!</p>
+              <select id="gachaGender" class="w-full p-2 mt-1 bg-card">
                 <option value="">Pilih Gender</option>
                 <option value="female">Perempuan</option>
                 <option value="male">Laki-laki</option>
               </select>
-              <button id="gachaBtn" class="mt-2 w-full cta-btn">Random Outfit Today 🎲</button>
-              <div id="gachaResult" class="mt-2 text-sm muted"></div>
+              <button id="gachaBtn" class="mt-2 w-full cta-btn">Putar Gacha 🎲</button>
+              <div id="gachaResult" class="mt-3 text-sm p-2 border border-adaptive bg-card rounded hidden"></div>
             </div>
           </div>
         </div>
@@ -501,31 +525,26 @@
 
     /* === DATA: MIX ITEMS DEFINED HERE === */
     const mixItems = [
-      // Item Lama
       { id:'t1', slot:'top', name:'White Tee', img:'whitetee.jpg' },
       { id:'t2', slot:'top', name:'Hoodie', img:'hoodie.jpg' },
       { id:'b1', slot:'bottom', name:'Blue Jeans', img:'bluej.jpg' },
       { id:'b2', slot:'bottom', name:'Cargo Pants', img:'cargo.jpg' },
       { id:'s1', slot:'shoes', name:'Sneakers', img:'Sneakers.jpg' },
       { id:'a1', slot:'acc', name:'Beanie', img:'beanie.jpg' },
-      // Item Baru - Tops
       { id:'t3', slot:'top', name:'Kemeja Oxford', img:'keem.jpg' },
       { id:'t4', slot:'top', name:'Blouse Sutra', img:'blouse.jpg' },
       { id:'t5', slot:'top', name:'Sweater / Knit', img:'swea.jpg' },
       { id:'t6', slot:'top', name:'Denim Shirt', img:'denimshrt.jpeg' },
       { id:'t7', slot:'top', name:'Turtle Neck', img:'turneck.jpeg' },
-      // Item Baru - Bottoms
       { id:'b3', slot:'bottom', name:'Tailored Trousers', img:'tailtrous.jpeg' },
       { id:'b4', slot:'bottom', name:'Pleated Skirt', img:'pltdskrt.jpeg' },
       { id:'b5', slot:'bottom', name:'Chinos / Khaki', img:'chinos.jpeg' },
       { id:'b6', slot:'bottom', name:'Leather Skirt', img:'leathrskrt.jpeg' },
       { id:'b7', slot:'bottom', name:'Jogger Pants', img:'joggrspnts.jpeg' },
-      // Item Baru - Shoes
       { id:'s2', slot:'shoes', name:'Clean White Sneakers', img:'whitsneakr.jpeg' },
       { id:'s3', slot:'shoes', name:'Loafers', img:'loafr.jpeg' },
       { id:'s4', slot:'shoes', name:'Ankle Boots', img:'ankel.jpeg' },
       { id:'s5', slot:'shoes', name:'Heeled Pumps', img:'heelpum.jpeg' },
-      // Item Baru - Accessories
       { id:'a2', slot:'acc', name:'Tote Bag', img:'tote.jpeg' },
       { id:'a3', slot:'acc', name:'Belt', img:'belt.jpeg' },
       { id:'a4', slot:'acc', name:'Scarf', img:'scarf.jpeg' },
@@ -538,10 +557,8 @@
       { id:'a11', slot:'acc', name:'Headband', img:'head.jpeg' }
     ];
 
-    // Helper to find item
     const getItem = (id) => mixItems.find(x => x.id === id);
 
-    // DATA PALETTES
     const palettes = [
       { id:'sunset', name:'Soft Sunset', colors:['#FFB6DA','#FFD1E8','#C7DDFF','#89A9FF'], desc:'Romantic pastel palette' },
       { id:'violet', name:'Blue → Purple', colors:['#A9C7FF','#C3A6FF','#ECD9FF','#F6F0FF'], desc:'Cool & modern vibes' },
@@ -552,7 +569,6 @@
       { id:'muted', name:'Muted Sophisticate', colors:['#E3D5FF','#D3EAFB','#FFF1E6','#E6E6E6'], desc:'Halus, office & chic' }
     ];
 
-    // DATA STYLE DICTIONARY
     const styleData = [
       { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
       { name:'Vintage Classic', category:'retro', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm','classic'] },
@@ -565,11 +581,10 @@
       { name:'Bohemian (Boho)', category:'retro', img:'boho.jpeg', desc:'Gaya yang bebas, artistik, dan terinspirasi dari alam atau budaya hippies. Mengutamakan tekstur dan motif etnik. Pakaian longgar, renda, sulaman.', tags:['art','nature','floral'] }
     ];
 
-    // Theme
+    // Theme Logic
     const savedTheme = localStorage.getItem('sm_theme') || 'light';
     document.body.className = 'theme-' + savedTheme;
 
-    // Nav
     function setActiveNav(target){
       $('.nav-btn').removeClass('active').css('background','').css('color','');
       $('.nav-btn[data-target="'+target+'"]').addClass('active');
@@ -579,7 +594,7 @@
       $('.section').addClass('hidden-section');
       $('#'+id).removeClass('hidden-section');
       setActiveNav(id);
-      if(id === 'saved') renderSavedPage(); // Render when tab opened
+      if(id === 'saved') renderSavedPage();
     }
 
     showSection('home');
@@ -590,16 +605,12 @@
 
     $(document).on('click','.nav-btn', function(){
       const t = $(this).data('target');
-      if(t) {
-        showSection(t);
-        window.scrollTo({top:0,behavior:'smooth'});
-      }
+      if(t) { showSection(t); window.scrollTo({top:0,behavior:'smooth'}); }
       $('#sidebar').removeClass('open');
     });
 
     $('.cta').on('click', function(e){
-      e.preventDefault();
-      showSection('home');
+      e.preventDefault(); showSection('home');
       $('html,body').animate({ scrollTop: $('#home h2').offset().top - 120 }, 500);
     });
 
@@ -622,13 +633,12 @@
     $('#tryPalette').on('click', ()=> { showSection('color'); window.scrollTo({top:0,behavior:'smooth'}); });
 
     /* ======= LOGIC REKOMENDASI & SIMPAN ======= */
-    let currentRecommendation = null; // Temp var for saving
+    let currentRecommendation = null;
 
     function recommendEngine(inputs) {
       const { gender, skin, occasion, place, weather } = inputs;
       let result = { styles: [], palette: null, itemIds: [] };
 
-      // Logic Simpel
       if (occasion === 'casual' || occasion === 'hangout') {
         result.styles = (place === 'outdoor') ? ['Streetwear', 'Bohemian'] : ['Korean Minimalist', 'Vintage'];
       } else if (occasion === 'formal') {
@@ -645,13 +655,11 @@
       if(occasion === 'formal') paletteId = 'mono';
       result.palette = palettes.find(p => p.id === paletteId);
 
-      // Items logic
       let topId='t1', botId='b1', shoeId='s1', accId='a2';
       if (occasion === 'formal') { topId = (gender==='female')?'t4':'t3'; botId=(gender==='female')?'b4':'b3'; shoeId=(gender==='female')?'s5':'s3'; accId='a6'; }
       else if (weather==='rain') { topId='t2'; shoeId='s4'; }
       else if (weather==='sunny' && place==='outdoor') { accId='a8'; shoeId='s2'; }
       
-      // Override logic request user
       if (gender === 'female' && occasion === 'casual' && weather === 'sunny' && skin === 'warm' && place === 'outdoor') {
         result.styles = ['Streetwear', 'Korean Minimalist'];
         result.palette = palettes.find(p => p.id === 'mono');
@@ -673,7 +681,6 @@
       
       const rec = recommendEngine(inputs);
       
-      // Store data for saving
       currentRecommendation = {
         id: Date.now(),
         date: new Date().toLocaleDateString(),
@@ -705,7 +712,6 @@
       $('html,body').animate({scrollTop: $('#result').offset().top - 80}, 400);
     });
 
-    // === SAVE RECOMMENDATION Logic ===
     $('#saveRecBtn').on('click', function(){
       if(!currentRecommendation) return;
       let saved = JSON.parse(localStorage.getItem('sm_saved_recs') || '[]');
@@ -714,8 +720,7 @@
       alert('Rekomendasi berhasil disimpan! Cek menu Saved.');
     });
 
-
-    /* ======= Colour Harmony & Save Palette ======= */
+    /* ======= Colour Harmony ======= */
     function renderSwatches(){
       $('#swatchGrid').html('');
       palettes.forEach(p => {
@@ -733,7 +738,6 @@
       currentPalette = p;
       $('#selectedPalette').html(p.colors.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
       $('#paletteInfo').text(p.desc);
-      // simple chart update logic
       const ctx = document.getElementById('skinToneChart').getContext('2d');
       if(window.mySkinChart) window.mySkinChart.destroy();
       window.mySkinChart = new Chart(ctx, {
@@ -743,19 +747,16 @@
       });
     });
 
-    // === SAVE PALETTE Logic (List) ===
     $('#savePalette').on('click', function(){
       if(!currentPalette) { alert('Pilih palette dulu'); return; }
       let saved = JSON.parse(localStorage.getItem('sm_saved_palettes') || '[]');
-      // Cek duplikat
       if(saved.some(x => x.id === currentPalette.id)) { alert('Palette ini sudah tersimpan.'); return; }
-      
       saved.push(currentPalette);
       localStorage.setItem('sm_saved_palettes', JSON.stringify(saved));
       alert('Palette disimpan ke Koleksi!');
     });
 
-    /* ======= Style Dictionary Logic (FIXED) ======= */
+    /* ======= Style Dictionary ======= */
     function renderGrid(filter='all'){
       $('#styleGrid').hide().html('');
       styleData.forEach((s,i)=>{
@@ -769,9 +770,8 @@
       });
       $('#styleGrid').fadeIn(180);
     }
-    renderGrid(); // Initial Render
+    renderGrid();
 
-    // Fixed Filter Listener
     $(document).on('click','.filter-btn', function(){
       $('.filter-btn').removeClass('bg-accent text-white').addClass('bg-inner');
       $(this).removeClass('bg-inner').addClass('bg-accent text-white');
@@ -779,7 +779,6 @@
       renderGrid(f);
     });
 
-    // Fixed Modal Listener
     $(document).on('click','#styleGrid [data-index]', function(){
       const i = $(this).data('index');
       const s = styleData[i];
@@ -792,8 +791,7 @@
     $('#closeModal').on('click', ()=> $('#styleModal').addClass('hidden').removeClass('modal-backdrop'));
     $('#styleModal').on('click', function(e){ if(e.target.id==='styleModal') { $(this).addClass('hidden').removeClass('modal-backdrop'); }});
 
-
-    /* ======= Mix & Match Logic ======= */
+    /* ======= Mix & Match ======= */
     function renderMixItems(){
       $('#mixItems').html('');
       mixItems.forEach(it=>{
@@ -821,7 +819,6 @@
       });
     });
     
-    // Tap select logic
     let selectedTapItem = null;
     $(document).on('click', '.mix-item-card', function(){
       $('.mix-item-card').removeClass('selected-item border-accent ring-2 ring-blue-500');
@@ -839,7 +836,6 @@
       }
     });
 
-    // === SAVE OUTFIT Logic (List) ===
     $('#saveOutfit').on('click', function(){
       const out = {};
       let hasItem = false;
@@ -848,15 +844,8 @@
         out[$(this).data('slot')] = val || null;
         if(val) hasItem = true;
       });
-      
       if(!hasItem) { alert('Slot masih kosong!'); return; }
-
-      const outfitObj = {
-        id: Date.now(),
-        date: new Date().toLocaleDateString(),
-        items: out
-      };
-
+      const outfitObj = { id: Date.now(), date: new Date().toLocaleDateString(), items: out };
       let saved = JSON.parse(localStorage.getItem('sm_saved_outfits') || '[]');
       saved.push(outfitObj);
       localStorage.setItem('sm_saved_outfits', JSON.stringify(saved));
@@ -874,36 +863,21 @@
       let list = JSON.parse(localStorage.getItem(key) || '[]');
       list = list.filter(x => x.id !== id);
       localStorage.setItem(key, JSON.stringify(list));
-      renderSavedPage(); // Re-render
+      renderSavedPage(); 
     };
 
     function renderSavedPage() {
-      // 1. Render Saved Recommendations
       const recs = JSON.parse(localStorage.getItem('sm_saved_recs') || '[]');
       const recContainer = $('#savedRecContainer');
       recContainer.html('');
       if(recs.length === 0) recContainer.html('<p class="muted col-span-2 p-4 bg-inner rounded">Belum ada rekomendasi tersimpan.</p>');
       else {
         recs.forEach(r => {
-          // Get image thumbnails
-          const thumbs = r.rec.itemIds.map(tid => {
-            const item = getItem(tid);
-            return item ? `<img src="${item.img}" class="w-8 h-8 rounded object-cover border border-adaptive">` : '';
-          }).join('');
-          
-          recContainer.append(`
-            <div class="card border-adaptive relative">
-              <button onclick="deleteSavedItem('rec', ${r.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="text-xs text-accent font-bold mb-1">${r.date}</div>
-              <div class="font-semibold text-sm mb-1">${r.rec.styles[0]}</div>
-              <div class="text-xs muted mb-2">Palette: ${r.rec.palette.name}</div>
-              <div class="flex gap-1 mt-2">${thumbs}</div>
-            </div>
-          `);
+          const thumbs = r.rec.itemIds.map(tid => { const item = getItem(tid); return item ? `<img src="${item.img}" class="w-8 h-8 rounded object-cover border border-adaptive">` : ''; }).join('');
+          recContainer.append(`<div class="card border-adaptive relative"><button onclick="deleteSavedItem('rec', ${r.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button><div class="text-xs text-accent font-bold mb-1">${r.date}</div><div class="font-semibold text-sm mb-1">${r.rec.styles[0]}</div><div class="text-xs muted mb-2">Palette: ${r.rec.palette.name}</div><div class="flex gap-1 mt-2">${thumbs}</div></div>`);
         });
       }
 
-      // 2. Render Saved Palettes
       const pals = JSON.parse(localStorage.getItem('sm_saved_palettes') || '[]');
       const palContainer = $('#savedPaletteContainer');
       palContainer.html('');
@@ -911,18 +885,10 @@
       else {
         pals.forEach(p => {
           const colorsHtml = p.colors.map(c => `<div style="background:${c}" class="h-8 w-8 rounded-full border shadow-sm"></div>`).join('');
-          palContainer.append(`
-            <div class="card border-adaptive relative">
-              <button onclick="deleteSavedItem('pal', '${p.id}')" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="font-bold">${p.name}</div>
-              <div class="flex gap-1 my-2 justify-center">${colorsHtml}</div>
-              <div class="text-xs muted">${p.desc}</div>
-            </div>
-          `);
+          palContainer.append(`<div class="card border-adaptive relative"><button onclick="deleteSavedItem('pal', '${p.id}')" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button><div class="font-bold">${p.name}</div><div class="flex gap-1 my-2 justify-center">${colorsHtml}</div><div class="text-xs muted">${p.desc}</div></div>`);
         });
       }
 
-      // 3. Render Saved Outfits
       const outfits = JSON.parse(localStorage.getItem('sm_saved_outfits') || '[]');
       const outContainer = $('#savedOutfitContainer');
       outContainer.html('');
@@ -930,73 +896,132 @@
       else {
         outfits.forEach(o => {
           let gridHtml = '';
-          ['top','bottom','shoes','acc'].forEach(slot => {
-            const iId = o.items[slot];
-            const it = getItem(iId);
-            if(it) {
-              gridHtml += `
-                <div class="flex flex-col items-center p-2 bg-inner rounded border border-adaptive">
-                  <img src="${it.img}" class="w-16 h-16 object-cover rounded mb-1">
-                  <span class="text-[10px] muted uppercase">${slot}</span>
-                </div>`;
-            }
-          });
-          
-          outContainer.append(`
-            <div class="card border-adaptive relative">
-              <button onclick="deleteSavedItem('out', ${o.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="text-xs text-accent font-bold mb-2">Outfit ${o.date}</div>
-              <div class="grid grid-cols-4 gap-2">
-                ${gridHtml || '<div class="text-sm muted col-span-4">Item data error/missing</div>'}
-              </div>
-            </div>
-          `);
+          ['top','bottom','shoes','acc'].forEach(slot => { const iId = o.items[slot]; const it = getItem(iId); if(it) { gridHtml += `<div class="flex flex-col items-center p-2 bg-inner rounded border border-adaptive"><img src="${it.img}" class="w-16 h-16 object-cover rounded mb-1"><span class="text-[10px] muted uppercase">${slot}</span></div>`; } });
+          outContainer.append(`<div class="card border-adaptive relative"><button onclick="deleteSavedItem('out', ${o.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button><div class="text-xs text-accent font-bold mb-2">Outfit ${o.date}</div><div class="grid grid-cols-4 gap-2">${gridHtml || '<div class="text-sm muted col-span-4">Item data error/missing</div>'}</div></div>`);
         });
       }
     }
 
-    /* ======= Other Tools ======= */
+    /* ======= MODIFIED TOOLS LOGIC ======= */
+    
+    /* 1. Modified Vibe Map (Added new vibes & styles) */
     const vibeMap = {
-      cute:{desc:'Soft pastel, playful silhouettes', colors:['#FFD6E0','#FFDCAE','#C7DDFF']},
-      minimal:{desc:'Neutral tones, clean lines', colors:['#F8FAFC','#CBD5E1','#9AA8B2']},
-      elegant:{desc:'Tailored, richer fabrics', colors:['#1F2937','#6B7280','#F3E8DC']},
-      cool:{desc:'Street/edgy pieces, monochrome', colors:['#0F172A','#334155','#89A9FF']},
-      cozy:{desc:'Layered knits, warm tones', colors:['#F7D6B3','#C6A78B','#EAFBF7']},
-      street:{desc:'Casual urban, practical', colors:['#111827','#6B7280','#B8B8B8']}
+      cute: { desc: 'Soft pastel, playful, lovely.', colors: ['#FFD6E0', '#FFDCAE', '#C7DDFF'], style: 'Soft Romantic' },
+      minimal: { desc: 'Neutral, clean lines, simple.', colors: ['#F8FAFC', '#CBD5E1', '#9AA8B2'], style: 'Korean Minimalist' },
+      elegant: { desc: 'Tailored, rich, classy.', colors: ['#1F2937', '#6B7280', '#F3E8DC'], style: 'Elegant Formal' },
+      cool: { desc: 'Edgy, monochrome, sharp.', colors: ['#0F172A', '#334155', '#89A9FF'], style: 'Techwear' },
+      cozy: { desc: 'Warm knits, comfy, earthy.', colors: ['#F7D6B3', '#C6A78B', '#EAFBF7'], style: 'Vintage Classic' },
+      street: { desc: 'Urban, oversized, hype.', colors: ['#111827', '#6B7280', '#B8B8B8'], style: 'Streetwear' },
+      // New Vibes
+      retro: { desc: 'Nostalgic, vibrant patterns, old-school.', colors: ['#D97706', '#F59E0B', '#78350F'], style: 'Vintage Classic' },
+      sporty: { desc: 'Active, comfortable, athletic.', colors: ['#EF4444', '#3B82F6', '#FFFFFF'], style: 'Streetwear' },
+      academia: { desc: 'Scholarly, tweed, dark tones.', colors: ['#4B2E2E', '#3F3F46', '#D4D4D8'], style: 'Preppy Style' },
+      boho: { desc: 'Free-spirited, patterns, artistic.', colors: ['#B45309', '#ECFCCB', '#713F12'], style: 'Bohemian (Boho)' },
+      artsy: { desc: 'Creative, colorful, unique.', colors: ['#F472B6', '#A78BFA', '#34D399'], style: 'Monochrome Chic' }
     };
-    $(document).on('click','.vibe-btn', function(){
+
+    $(document).on('click', '.vibe-btn', function() {
       const v = $(this).data('vibe');
       const info = vibeMap[v];
-      $('#vibeResult').html(`<strong>${v.toUpperCase()}</strong><p class="text-sm">${info.desc}</p><div class="flex gap-2 mt-2">${info.colors.map(c=>`<div style="background:${c}" class="w-10 h-8 rounded"></div>`).join('')}</div>`);
+      $('#vibeResult').removeClass('hidden').html(`
+        <strong class="text-accent text-lg uppercase">${v}</strong>
+        <p class="text-sm mb-2">${info.desc}</p>
+        <div class="flex gap-2 mb-2">${info.colors.map(c => `<div style="background:${c}" class="w-8 h-8 rounded border border-gray-200 shadow-sm"></div>`).join('')}</div>
+        <div class="text-xs font-bold mt-2">Rekomendasi Style: <span class="text-blue-500">${info.style}</span></div>
+      `);
     });
 
-    $('#calcBP').on('click', function(){
+    /* 2. Modified Body Proportion (Shape Consultant) */
+    const shapeAdvice = {
+      pear: { focus: "Balance lower body width.", dos: "A-line skirts, bootcut pants, detail on shoulders.", donts: "Skinny jeans with light colors." },
+      apple: { focus: "Highlight legs & décolletage.", dos: "V-neck tops, empire waist, structured jackets.", donts: "Belts on natural waist." },
+      hourglass: { focus: "Define the waist.", dos: "Wrap dresses, high-waist belts, fitted tops.", donts: "Boxy or shapeless oversized tops." },
+      rectangle: { focus: "Create curves.", dos: "Ruffles, peplum tops, belted coats, layered tops.", donts: "Square necklines without detailing." },
+      inverted_triangle: { focus: "Balance broad shoulders.", dos: "Wide-leg pants, full skirts, V-necks.", donts: "Puffy sleeves, shoulder pads." }
+    };
+
+    $('#calcBP').on('click', function() {
       const h = parseFloat($('#bpHeight').val());
       const w = parseFloat($('#bpWeight').val());
-      if(!h || !w){ alert('Isi tinggi & berat dulu'); return; }
-      const bmi = (w / ((h/100)*(h/100))).toFixed(1);
-      $('#bpResult').text(`BMI: ${bmi}. Pilih potongan yang seimbang.`);
+      const shape = $('#bpShape').val();
+
+      if (!h || !w || !shape) { alert('Mohon isi tinggi, berat, dan bentuk tubuh.'); return; }
+      
+      const bmi = (w / ((h / 100) * (h / 100))).toFixed(1);
+      const advice = shapeAdvice[shape];
+
+      $('#bpResult').html(`
+        <div class="p-3 bg-card border border-adaptive rounded shadow-sm">
+          <div class="font-bold text-accent mb-1">Hasil Analisis:</div>
+          <div class="text-xs mb-2">BMI: ${bmi}</div>
+          <div class="text-sm font-semibold mb-1">Strategi ${shape.replace('_', ' ').toUpperCase()}:</div>
+          <ul class="list-disc pl-4 text-xs space-y-1 muted">
+            <li><strong>Fokus:</strong> ${advice.focus}</li>
+            <li><strong>Do's:</strong> ${advice.dos}</li>
+            <li><strong>Avoid:</strong> ${advice.donts}</li>
+          </ul>
+        </div>
+      `);
     });
 
-    const weatherMap = {
-      sunny:'Kaos ringan, topi, kacamata hitam', rain:'Hoodie + waterproof jacket', cloudy:'Layering ringan', hot:'Atasan adem, celana pendek', cold:'Coat, knit, boots'
+    /* 3. Modified Weather Match (Alternatives) */
+    const weatherMapAdvanced = {
+      sunny: { main: 'Kaos ringan, topi, kacamata hitam', alt: 'Tank top, kemeja linen, sandal' },
+      rain: { main: 'Hoodie + waterproof jacket, sepatu anti air', alt: 'Trench coat, payung, boots karet' },
+      cloudy: { main: 'Layering ringan, jaket denim', alt: 'Cardigan, kaos lengan panjang' },
+      hot: { main: 'Atasan adem, celana pendek / linen', alt: 'Dress katun, rok flowy, topi lebar' },
+      cold: { main: 'Coat, knit sweater, boots', alt: 'Puffer jacket, thermal inner, syal tebal' }
     };
-    $('#weatherBtn').on('click', function(){
-      const w = $('#weatherSel').val(); const p = $('#placeSel').val();
-      if(!w || !p){ alert('Pilih cuaca & tempat dulu'); return; }
-      const r = weatherMap[w] + (p==='outdoor' ? ' (sesuaikan alas kaki outdoor)' : '');
-      $('#weatherResult').text(r);
+
+    $('#weatherBtn').on('click', function() {
+      const w = $('#weatherSel').val();
+      const p = $('#placeSel').val();
+      if (!w || !p) { alert('Pilih cuaca & tempat dulu'); return; }
+      
+      const info = weatherMapAdvanced[w];
+      const placeNote = (p === 'outdoor' ? ' (Outdoor: Gunakan sunscreen/topi)' : ' (Indoor: Bawa luaran tipis jika AC dingin)');
+      
+      $('#weatherResult').removeClass('hidden').html(`
+        <div class="p-2 bg-card rounded border border-adaptive">
+          <div class="font-bold text-accent mb-1">Opsi Utama:</div>
+          <div class="text-sm mb-2">${info.main} ${placeNote}</div>
+          <div class="font-bold text-muted text-xs mb-1">Alternatif:</div>
+          <div class="text-sm muted">${info.alt}</div>
+        </div>
+      `);
     });
 
-    // Gacha
-    const outfits = [
-      {gender:'male', name:'Casual Weekend', desc:'Casual tee + denim + sneakers'},
-      {gender:'female', name:'Date Night', desc:'Soft blouse + midi skirt'},
-    ];
-    $('#gachaBtn').on('click', function(){
-      const g = $('#gachaGender').val(); if(!g){ alert('Pilih gender dulu'); return; }
-      const pick = outfits.find(o=>o.gender===g) || outfits[0];
-      $('#gachaResult').html(`<strong>${pick.name}</strong><div class="text-sm mt-1 muted">${pick.desc}</div>`);
+    /* 4. Modified Randomizer (True Gacha) */
+    function getRandomItem(slot) {
+      const items = mixItems.filter(i => i.slot === slot);
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    const gachaMoods = ["Casual Day Out", "Date Night", "Office Chic", "Lazy Sunday", "Coffee Run", "Adventure Time"];
+
+    $('#gachaBtn').on('click', function() {
+      const g = $('#gachaGender').val();
+      if (!g) { alert('Pilih gender dulu'); return; }
+
+      // True Random Logic
+      const top = getRandomItem('top');
+      const bot = getRandomItem('bottom');
+      const shoe = getRandomItem('shoes');
+      const acc = getRandomItem('acc'); // Optional accessories
+      const mood = gachaMoods[Math.floor(Math.random() * gachaMoods.length)];
+
+      $('#gachaResult').removeClass('hidden').html(`
+        <div class="text-center">
+          <div class="text-xs uppercase tracking-widest text-muted mb-1">Mood: ${mood}</div>
+          <div class="font-bold text-accent text-lg mb-2">✨ ${top.name} + ${bot.name} ✨</div>
+          <div class="text-sm muted mb-2">with ${shoe.name} & ${acc.name}</div>
+          <div class="flex justify-center gap-1 mt-2">
+             <img src="${top.img}" class="w-8 h-8 rounded border object-cover">
+             <img src="${bot.img}" class="w-8 h-8 rounded border object-cover">
+             <img src="${shoe.img}" class="w-8 h-8 rounded border object-cover">
+          </div>
+        </div>
+      `);
     });
 
     // Scroll sync disabled
