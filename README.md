@@ -5,6 +5,6 @@ Anggota:
 1. Luna Alifia Husna
 2. Zahra Aurellia Putri
    
-Sekolah SMAN 1 TUMPANG
+Sekolah SMAN 1 TUMPANG, Kab. Malang
 
-Lomba AREK AI MURID JATIM
+Lomba AREK_AI MURID JATIM
