@@ -12,39 +12,143 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* --- ROOT VARIABLES & THEMES --- */
     :root{
       --bg: linear-gradient(180deg,#f8fafc,#e6eefc);
-      --text: #0f172a;
-      --card: #fff;
+      --text: #334155; /* Slate 700 for better readability than pure black */
+      --card: #ffffff;
       --accent: #2563eb;
-      --muted: #6b7280;
-      --glass: rgba(255,255,255,0.6);
+      --muted: #64748b;
+      --glass: rgba(255,255,255,0.75);
+      --border: #e2e8f0;
+      --bg-inner: #f1f5f9; /* Pengganti bg-gray-100 */
     }
-    /* Theme vars */
-    .theme-light { --bg: linear-gradient(180deg,#f8fafc,#e6eefc); --text:#0f172a; --card:#ffffff; --accent:#2563eb; --muted:#6b7280; --glass: rgba(255,255,255,0.6); }
-    .theme-dark { --bg: linear-gradient(180deg,#071021,#041018); --text:#e6eefc; --card:#071428; --accent:#7c3aed; --muted:#9aa6bb; --glass: rgba(8,12,20,0.6); }
-    .theme-pinkblue { --bg: linear-gradient(135deg,#fff0f6,#e6f0ff); --text:#0f172a; --card:#ffffff; --accent:#ec4899; --muted:#6b7280; --glass: rgba(255,255,255,0.7); }
-    .theme-bluepurple { --bg: linear-gradient(135deg,#f0f7ff,#efe6ff); --text:#0f172a; --card:#ffffff; --accent:#6366f1; --muted:#6b7280; --glass: rgba(255,255,255,0.7); }
-    .theme-bluegreen { --bg: linear-gradient(135deg,#e6fff7,#e6f4ff); --text:#0f172a; --card:#ffffff; --accent:#06b6d4; --muted:#6b7280; --glass: rgba(255,255,255,0.7); }
 
+    /* Theme: Light */
+    .theme-light { 
+      --bg: linear-gradient(180deg,#f8fafc,#e6eefc); 
+      --text:#334155; 
+      --card:#ffffff; 
+      --accent:#2563eb; 
+      --muted:#64748b; 
+      --glass: rgba(255,255,255,0.75);
+      --border: #e2e8f0;
+      --bg-inner: #f8fafc;
+    }
+
+    /* Theme: Dark (Fixed Contrast) */
+    .theme-dark { 
+      --bg: linear-gradient(180deg,#0f172a,#1e293b); /* Darker/Richer background */
+      --text:#f1f5f9; /* Almost white */
+      --card:#1e293b; /* Slate 800 */
+      --accent:#818cf8; /* Indigo 400 - softer for dark mode */
+      --muted:#94a3b8; /* Slate 400 */
+      --glass: rgba(30, 41, 59, 0.8);
+      --border: #334155;
+      --bg-inner: #334155; /* Lighter than card for contrast */
+    }
+
+    /* Theme: Pink-Blue */
+    .theme-pinkblue { 
+      --bg: linear-gradient(135deg,#fff0f6,#e6f0ff); 
+      --text:#334155; 
+      --card:#ffffff; 
+      --accent:#ec4899; 
+      --muted:#64748b; 
+      --glass: rgba(255,255,255,0.75);
+      --border: #fbcfe8;
+      --bg-inner: #fff1f2;
+    }
+
+    /* Theme: Blue-Purple */
+    .theme-bluepurple { 
+      --bg: linear-gradient(135deg,#f0f7ff,#efe6ff); 
+      --text:#334155; 
+      --card:#ffffff; 
+      --accent:#6366f1; 
+      --muted:#64748b; 
+      --glass: rgba(255,255,255,0.75);
+      --border: #e0e7ff;
+      --bg-inner: #faf5ff;
+    }
+
+    /* Theme: Blue-Green */
+    .theme-bluegreen { 
+      --bg: linear-gradient(135deg,#e6fff7,#e6f4ff); 
+      --text:#334155; 
+      --card:#ffffff; 
+      --accent:#06b6d4; 
+      --muted:#64748b; 
+      --glass: rgba(255,255,255,0.75);
+      --border: #cffafe;
+      --bg-inner: #ecfeff;
+    }
+
+    /* --- GLOBAL STYLES --- */
     html,body{height:100%}
-    body{font-family:"Plus Jakarta Sans",system-ui,-apple-system; margin:0; background:var(--bg); color:var(--text); transition:background .28s,color .28s; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
-    .card{background:var(--card); border-radius:.75rem; box-shadow:0 10px 30px rgba(2,6,23,0.06); padding:1rem; color:var(--text)}
-    header.site-header{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter: blur(8px);border-bottom:1px solid rgba(0,0,0,0.06)}
-    header.site-header .desktop-nav .nav-btn{color:var(--text)}
-    .nav-btn.active{color:var(--card); background:var(--accent); padding:.35rem .6rem; border-radius:.5rem}
-    a.cta{background:var(--accent); color:#fff; padding:.65rem 1rem; border-radius:.6rem; display:inline-block; text-decoration:none; cursor: pointer;}
+    body{
+      font-family:"Plus Jakarta Sans",system-ui,-apple-system; 
+      margin:0; 
+      background:var(--bg); 
+      color:var(--text); /* KUNCI: Semua text default mengikuti ini */
+      transition:background .28s, color .28s; 
+      -webkit-font-smoothing:antialiased; 
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Custom Classes to replace Tailwind hardcodes */
+    .card { background:var(--card); border-radius:.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.08); padding:1rem; color:var(--text); border: 1px solid var(--border); }
+    .text-accent { color: var(--accent); }
+    .bg-inner { background-color: var(--bg-inner); }
+    .border-adaptive { border-color: var(--border); }
+    .muted { color: var(--muted) !important; }
+
+    /* Header */
+    header.site-header{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--glass);backdrop-filter: blur(12px);border-bottom:1px solid var(--border);}
+    header.site-header .desktop-nav .nav-btn{color:var(--text);}
+    .nav-btn:hover { background-color: var(--bg-inner); }
+    .nav-btn.active{color: #ffffff; background:var(--accent); padding:.35rem .6rem; border-radius:.5rem}
+    
+    /* Buttons */
+    a.cta, button.cta-btn {background:var(--accent); color:#fff; padding:.65rem 1rem; border-radius:.6rem; display:inline-block; text-decoration:none; cursor: pointer; transition: opacity 0.2s;}
+    a.cta:hover, button.cta-btn:hover { opacity: 0.9; }
+    
     /* Sidebar */
-    #sidebar{position:fixed;left:-340px;top:0;height:100vh;width:320px;background:var(--card);z-index:80;box-shadow:10px 0 40px rgba(2,6,23,0.12);transition:left .32s;padding:1rem;overflow:auto}
+    #sidebar{position:fixed;left:-340px;top:0;height:100vh;width:320px;background:var(--card);z-index:80;box-shadow:10px 0 40px rgba(0,0,0,0.2);transition:left .32s;padding:1rem;overflow:auto; border-right: 1px solid var(--border);}
     #sidebar.open{left:0}
+    
     /* Modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(3,7,18,0.6);display:flex;align-items:center;justify-content:center;z-index:100}
-    .modal{width:95%;max-width:820px;background:var(--card);padding:1.2rem;border-radius:12px}
-    /* small helpers */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:100}
+    .modal{width:95%;max-width:820px;background:var(--card);padding:1.2rem;border-radius:12px; color: var(--text); border: 1px solid var(--border);}
+    
+    /* Utils */
     .hidden-section{display:none}
     .hover-raise:hover{transform:translateY(-6px);transition:transform .18s}
     img.object-cover{object-fit:cover}
-    /* responsive tweaks */
+    
+    /* Inputs & Selects (Crucial for Dark Mode) */
+    select, input[type="number"] { 
+      background: var(--bg-inner); 
+      color: var(--text); 
+      border:1px solid var(--border); 
+      border-radius:8px; 
+      padding: 0.5rem;
+      outline: none;
+    }
+    select:focus, input:focus { border-color: var(--accent); }
+
+    /* Aesthetic Elements */
+    .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:var(--bg-inner);font-size:.85rem; color: var(--text); border: 1px solid var(--border);}
+    .drop-slot{min-height:48px; transition: background 0.3s; background: var(--bg-inner); border: 1px solid var(--border); color: var(--text);}
+    .hero-media { max-width:520px; width:100%; height:360px; border-radius:12px; overflow:hidden; box-shadow:0 12px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); }
+    
+    /* Sticky Sidebar & Drag */
+    .sticky-sidebar { position: sticky; top: 110px; height: fit-content; z-index: 10; }
+    .drop-slot.drag-over { background: rgba(37, 99, 235, 0.1); border-color: var(--accent); border-style: dashed; }
+    .card.selected-item { outline: 3px solid var(--accent); transform: scale(0.98); }
+    .mix-item-card { touch-action: none; }
+
+    /* Responsive */
     @media (max-width:768px){
       header.site-header .desktop-nav{display:none}
       header.site-header .mobile-hamb{display:block}
@@ -52,33 +156,13 @@
     @media (min-width:769px){
       header.site-header .mobile-hamb{display:none}
     }
-    /* aesthetic */
-    .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:rgba(0,0,0,0.06);font-size:.85rem}
-    /* drop slot */
-    .drop-slot{min-height:48px; transition: background 0.3s;}
-    /* improved image frame */
-    .hero-media { max-width:520px; width:100%; height:360px; border-radius:12px; overflow:hidden; box-shadow:0 12px 30px rgba(2,6,23,0.08) }
-    /* better contrast for dark theme actionable items */
-    .theme-dark .chip{background:rgba(255,255,255,0.04)}
-    .theme-dark header.site-header{border-bottom:1px solid rgba(255,255,255,0.04)}
-    /* utility */
-    .muted { color: var(--muted) }
-    /* make buttons and selects look consistent */
-    select, input[type="number"] { background: transparent; border:1px solid rgba(15,23,42,0.08); border-radius:8px }
-    .theme-dark select, .theme-dark input[type="number"] { border:1px solid rgba(255,255,255,0.06) }
-    
-    /* === FIX: Sticky Sidebar & Drop Target Styling === */
-    .sticky-sidebar { position: sticky; top: 110px; height: fit-content; z-index: 10; }
-    .drop-slot.drag-over { background: rgba(37, 99, 235, 0.1); border-color: var(--accent); border-style: dashed; }
-    .card.selected-item { outline: 3px solid var(--accent); transform: scale(0.98); }
-    .mix-item-card { touch-action: none; }
   </style>
 </head>
 <body class="theme-light">
 
   <aside id="sidebar" aria-hidden="true">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold">Menu</h3>
+      <h3 class="text-lg font-bold text-accent">Menu</h3>
       <button id="closeSidebar" class="text-xl">✕</button>
     </div>
     <nav class="space-y-2">
@@ -87,17 +171,17 @@
       <button class="w-full text-left nav-btn p-2 rounded-md" data-target="style">Style Dictionary</button>
       <button class="w-full text-left nav-btn p-2 rounded-md" data-target="mixmatch">Mix & Match</button>
       <button class="w-full text-left nav-btn p-2 rounded-md" data-target="tools">Tools</button>
-      <button class="w-full text-left nav-btn p-2 rounded-md text-blue-600 font-semibold" data-target="saved">❤️ Saved / Simpan</button>
+      <button class="w-full text-left nav-btn p-2 rounded-md text-accent font-bold" data-target="saved">❤️ Saved / Simpan</button>
     </nav>
-    <hr class="my-4" />
+    <hr class="my-4 border-adaptive" />
     <div>
       <div class="font-semibold mb-2">Theme</div>
       <div class="flex flex-col gap-2">
-        <button class="theme-btn p-2 rounded" data-theme="light">☀ Light</button>
-        <button class="theme-btn p-2 rounded" data-theme="dark">🌙 Dark</button>
-        <button class="theme-btn p-2 rounded" data-theme="pinkblue">💗 Pink → Blue</button>
-        <button class="theme-btn p-2 rounded" data-theme="bluepurple">💜 Blue → Purple</button>
-        <button class="theme-btn p-2 rounded" data-theme="bluegreen">💙 Blue → Green</button>
+        <button class="theme-btn p-2 rounded border border-adaptive bg-inner hover:bg-gray-200 dark:hover:bg-slate-700 text-left" data-theme="light">☀ Light</button>
+        <button class="theme-btn p-2 rounded border border-adaptive bg-inner hover:bg-gray-200 dark:hover:bg-slate-700 text-left" data-theme="dark">🌙 Dark (Fixed)</button>
+        <button class="theme-btn p-2 rounded border border-adaptive bg-inner hover:bg-gray-200 dark:hover:bg-slate-700 text-left" data-theme="pinkblue">💗 Pink → Blue</button>
+        <button class="theme-btn p-2 rounded border border-adaptive bg-inner hover:bg-gray-200 dark:hover:bg-slate-700 text-left" data-theme="bluepurple">💜 Blue → Purple</button>
+        <button class="theme-btn p-2 rounded border border-adaptive bg-inner hover:bg-gray-200 dark:hover:bg-slate-700 text-left" data-theme="bluegreen">💙 Blue → Green</button>
       </div>
     </div>
   </aside>
@@ -106,9 +190,9 @@
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
       <div class="flex items-center gap-3">
         <button id="openSidebar" class="mobile-hamb text-2xl">☰</button>
-        <a href="#" class="flex items-center gap-2">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" class="rounded-full"><circle cx="12" cy="12" r="10" fill="#93c5fd"/></svg>
-          <span class="text-xl font-semibold">StyleMatch</span>
+        <a href="#" class="flex items-center gap-2 no-underline">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" class="rounded-full"><circle cx="12" cy="12" r="10" class="fill-accent" style="fill: var(--accent)"/></svg>
+          <span class="text-xl font-bold text-accent">StyleMatch</span>
         </a>
       </div>
 
@@ -118,7 +202,7 @@
         <button class="nav-btn px-3 py-1 rounded" data-target="style">Style Dictionary</button>
         <button class="nav-btn px-3 py-1 rounded" data-target="mixmatch">Mix & Match</button>
         <button class="nav-btn px-3 py-1 rounded" data-target="tools">Tools</button>
-        <button class="nav-btn px-3 py-1 rounded text-blue-600 font-bold" data-target="saved">Saved</button>
+        <button class="nav-btn px-3 py-1 rounded text-accent font-bold" data-target="saved">Saved</button>
       </nav>
 
       <div class="flex items-center gap-3">
@@ -134,13 +218,13 @@
       <div class="rounded-2xl overflow-hidden card grid md:grid-cols-2 gap-6 items-center">
         <div class="p-6 text-left">
           <h1 class="text-3xl md:text-4xl font-bold mb-3">Temukan Outfit Terbaik Versi Dirimu</h1>
-          <p class="text-muted mb-4">Rekomendasi outfit, colour harmony, style dictionary, mix & match, dan fitur lainnya — sekarang dengan palette & vibe lebih kaya serta pengalaman dark theme yang lebih nyaman.</p>
+          <p class="muted mb-4">Rekomendasi outfit, colour harmony, style dictionary, mix & match, dan fitur lainnya — sekarang dengan palette & vibe lebih kaya serta pengalaman dark theme yang lebih nyaman.</p>
           <div class="flex flex-wrap gap-3">
             <a href="#home" class="cta">Mulai Sekarang</a>
             <button id="exploreStyles" class="chip">Lihat Style Dictionary</button>
             <button id="tryPalette" class="chip">Jelajahi Colour Harmony</button>
           </div>
-          <div class="mt-6 text-sm text-muted">Designed by Luna & Aurel — Built with HTML, Tailwind, jQuery & Chart.js</div>
+          <div class="mt-6 text-sm muted">Designed by Luna & Aurel — Built with HTML, Tailwind, jQuery & Chart.js</div>
         </div>
         <div class="p-6 flex items-center justify-center">
           <div class="hero-media">
@@ -152,11 +236,11 @@
 
     <section id="home" class="section max-w-3xl mx-auto px-4 py-8">
       <article class="card">
-        <h2 class="text-2xl font-semibold text-blue-600 mb-3">Temukan Gaya yang Cocok Untukmu</h2>
+        <h2 class="text-2xl font-semibold text-accent mb-3">Temukan Gaya yang Cocok Untukmu</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block font-semibold mb-1">Pilih Gender:</label>
-            <select id="gender" class="w-full p-2 rounded">
+            <select id="gender" class="w-full">
               <option value="">-- Pilih --</option>
               <option value="female">Perempuan</option>
               <option value="male">Laki-laki</option>
@@ -164,7 +248,7 @@
           </div>
           <div>
             <label class="block font-semibold mb-1">Pilih Warna Kulit:</label>
-            <select id="skinTone" class="w-full p-2 rounded">
+            <select id="skinTone" class="w-full">
               <option value="">-- Pilih --</option>
               <option value="light">Light (Putih)</option>
               <option value="warm">Warm (Kuning Langsat)</option>
@@ -175,7 +259,7 @@
 
           <div>
             <label class="block font-semibold mb-1">Pilih Acara:</label>
-            <select id="occasion" class="w-full p-2 rounded">
+            <select id="occasion" class="w-full">
               <option value="">-- Pilih --</option>
               <option value="casual">Kasual</option>
               <option value="formal">Formal</option>
@@ -185,7 +269,7 @@
           </div>
           <div>
             <label class="block font-semibold mb-1">Pilih Tempat (Indoor/Outdoor):</label>
-            <select id="placeWhere" class="w-full p-2 rounded">
+            <select id="placeWhere" class="w-full">
               <option value="">-- Pilih --</option>
               <option value="indoor">Indoor</option>
               <option value="outdoor">Outdoor</option>
@@ -194,7 +278,7 @@
 
           <div>
             <label class="block font-semibold mb-1">Cuaca / Musim:</label>
-            <select id="weatherWhere" class="w-full p-2 rounded">
+            <select id="weatherWhere" class="w-full">
               <option value="">-- Pilih --</option>
               <option value="sunny">Cerah</option>
               <option value="rain">Hujan</option>
@@ -204,14 +288,14 @@
             </select>
           </div>
           <div class="flex items-end">
-            <button id="generateBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Lihat Rekomendasi</button>
+            <button id="generateBtn" class="w-full cta-btn">Lihat Rekomendasi</button>
           </div>
         </div>
 
-        <div id="result" class="mt-6 p-4 rounded hidden border-t border-gray-100">
+        <div id="result" class="mt-6 p-4 rounded hidden border-adaptive border-t">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-semibold text-blue-600">✨ Rekomendasi Kamu:</h3>
-            <button id="saveRecBtn" class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200 transition">💾 Simpan Hasil</button>
+            <h3 class="text-xl font-semibold text-accent">✨ Rekomendasi Kamu:</h3>
+            <button id="saveRecBtn" class="text-sm border border-adaptive bg-inner text-accent px-3 py-1 rounded hover:opacity-80 transition">💾 Simpan Hasil</button>
           </div>
           
           <p id="styleResult" class="mt-2"></p>
@@ -219,8 +303,8 @@
           <p id="outfitText" class="mt-1"></p> 
           <div id="suggestions" class="mt-3 grid sm:grid-cols-2 gap-2"></div>
           
-          <div id="recImagesContainer" class="mt-6 border-t pt-4 hidden">
-            <h4 class="font-semibold mb-3 text-gray-700">✨ Item Pilihan untuk Gaya Ini:</h4>
+          <div id="recImagesContainer" class="mt-6 border-t border-adaptive pt-4 hidden">
+            <h4 class="font-semibold mb-3 muted">✨ Item Pilihan untuk Gaya Ini:</h4>
             <div id="recImages" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
           </div>
         </div>
@@ -229,21 +313,21 @@
 
     <section id="color" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
-        <h2 class="text-2xl font-semibold text-blue-600">Colour Harmony</h2>
+        <h2 class="text-2xl font-semibold text-accent">Colour Harmony</h2>
         <p class="text-sm muted mb-4">Klik palette untuk melihat kombinasi warna, simpan ke koleksi, dan lihat contoh cocok untuk style dan skin tone tertentu.</p>
 
         <div id="swatchGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
 
         <div class="mt-6 grid md:grid-cols-2 gap-4">
-          <div class="card">
+          <div class="card bg-inner">
             <h3 class="font-semibold">Selected Palette</h3>
             <div id="selectedPalette" class="flex gap-2 mt-2"></div>
             <p id="paletteInfo" class="text-sm muted mt-2"></p>
             <div class="flex gap-2 mt-3">
-              <button id="savePalette" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">❤️ Simpan ke Koleksi</button>
+              <button id="savePalette" class="cta-btn">❤️ Simpan ke Koleksi</button>
             </div>
           </div>
-          <div class="card">
+          <div class="card bg-inner">
             <h3 class="font-semibold">Skin Tone Harmony</h3>
             <div class="text-sm muted mb-3">Visualisasi proporsi warna.</div>
             <canvas id="skinToneChart" width="400" height="200"></canvas>
@@ -254,17 +338,17 @@
 
     <section id="style" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
-        <h2 class="text-2xl font-semibold text-blue-600">Style Dictionary</h2>
-        <p class="text-sm muted mb-4">Klik card untuk melihat detail style.</p>
+        <h2 class="text-2xl font-semibold text-accent">Style Dictionary</h2>
+        <p class="text-sm muted mb-4">Klik card untuk melihat detail style lengkap.</p>
 
         <div class="mb-4 flex gap-2 flex-wrap">
-          <button class="filter-btn px-3 py-1 rounded bg-blue-600 text-white" data-filter="all">Semua</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="modern">Modern</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="classic">Classic</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="street">Street</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="elegant">Elegant</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="minimal">Minimal</button>
-          <button class="filter-btn px-3 py-1 rounded bg-gray-100" data-filter="retro">Retro</button>
+          <button class="filter-btn px-3 py-1 rounded bg-accent text-white" data-filter="all">Semua</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="modern">Modern</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="classic">Classic</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="street">Street</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="elegant">Elegant</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="minimal">Minimal</button>
+          <button class="filter-btn px-3 py-1 rounded bg-inner hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="retro">Retro</button>
         </div>
 
         <div id="styleGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
@@ -273,26 +357,26 @@
 
     <section id="mixmatch" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
-        <h2 class="text-2xl font-semibold text-blue-600">Mix & Match (Drag & Drop)</h2>
+        <h2 class="text-2xl font-semibold text-accent">Mix & Match (Drag & Drop)</h2>
         <p class="text-sm muted mb-4">
-          <strong>Cara Pakai:</strong> Drag item ke slot, ATAU klik item lalu klik slot tujuan (Tap-to-Fill) untuk kemudahan di HP.
+          <strong>Cara Pakai:</strong> Drag item ke slot, ATAU klik item lalu klik slot tujuan (Tap-to-Fill).
         </p>
 
         <div class="grid md:grid-cols-3 gap-4 relative">
           <div id="mixItems" class="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
           
           <div class="sticky-sidebar">
-            <div class="card border border-blue-100 shadow-lg">
-              <h3 class="font-semibold text-blue-600">Your Outfit</h3>
+            <div class="card border-adaptive shadow-lg">
+              <h3 class="font-semibold text-accent">Your Outfit</h3>
               <p class="text-xs muted mb-2">Susun outfit kamu di sini.</p>
               <div id="dropArea" class="mt-3 space-y-2">
-                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="top">Top: <span class="slot-val font-medium">—</span></div>
-                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="bottom">Bottom: <span class="slot-val font-medium">—</span></div>
-                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="shoes">Shoes: <span class="slot-val font-medium">—</span></div>
-                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="acc">Accessory: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 rounded" data-slot="top">Top: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 rounded" data-slot="bottom">Bottom: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 rounded" data-slot="shoes">Shoes: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 rounded" data-slot="acc">Accessory: <span class="slot-val font-medium">—</span></div>
               </div>
-              <button id="saveOutfit" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition">Simpan ke "Outfit Saya"</button>
-              <button id="clearOutfit" class="mt-2 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded transition text-sm">Reset Slot</button>
+              <button id="saveOutfit" class="mt-3 w-full cta-btn">Simpan ke "Outfit Saya"</button>
+              <button id="clearOutfit" class="mt-2 w-full bg-inner border border-adaptive text-muted px-3 py-2 rounded transition text-sm hover:opacity-80">Reset Slot</button>
             </div>
           </div>
         </div>
@@ -301,38 +385,38 @@
 
     <section id="tools" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
-        <h2 class="text-2xl font-semibold text-blue-600">Tools</h2>
+        <h2 class="text-2xl font-semibold text-accent">Tools</h2>
         <div class="grid md:grid-cols-3 gap-4 mt-4">
-          <div class="card">
+          <div class="card bg-inner">
             <h3 class="font-semibold">What Vibes Are You?</h3>
             <div class="mt-3 grid grid-cols-2 gap-2">
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cute">Cute</button>
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="minimal">Minimal</button>
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="elegant">Elegant</button>
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cool">Cool</button>
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="cozy">Cozy</button>
-              <button class="vibe-btn p-2 rounded bg-gray-100" data-vibe="street">Street</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cute">Cute</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="minimal">Minimal</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="elegant">Elegant</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cool">Cool</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="cozy">Cozy</button>
+              <button class="vibe-btn p-2 rounded bg-card border border-adaptive" data-vibe="street">Street</button>
             </div>
             <div id="vibeResult" class="mt-3 text-sm muted"></div>
           </div>
-          <div class="card">
+          <div class="card bg-inner">
             <h3 class="font-semibold">Body Proportion Helper</h3>
-            <input id="bpHeight" type="number" placeholder="Tinggi (cm)" class="w-full p-2 rounded mb-2" />
-            <input id="bpWeight" type="number" placeholder="Berat (kg)" class="w-full p-2 rounded mb-2" />
-            <select id="bpShape" class="w-full p-2 rounded mb-2">
+            <input id="bpHeight" type="number" placeholder="Tinggi (cm)" class="w-full p-2 mb-2 bg-card" />
+            <input id="bpWeight" type="number" placeholder="Berat (kg)" class="w-full p-2 mb-2 bg-card" />
+            <select id="bpShape" class="w-full p-2 mb-2 bg-card">
               <option value="">Pilih bentuk tubuh (opsional)</option>
               <option value="petite">Petite</option>
               <option value="tall">Tall</option>
               <option value="curvy">Curvy</option>
               <option value="slim">Slim</option>
             </select>
-            <button id="calcBP" class="mt-1 bg-blue-600 text-white px-3 py-2 rounded">Dapatkan Tips</button>
+            <button id="calcBP" class="mt-1 w-full cta-btn">Dapatkan Tips</button>
             <div id="bpResult" class="mt-3 text-sm muted"></div>
           </div>
           <div class="space-y-4">
-            <div class="card">
+            <div class="card bg-inner">
               <h3 class="font-semibold">Outfit Weather Match</h3>
-              <select id="weatherSel" class="w-full p-2 rounded mt-2">
+              <select id="weatherSel" class="w-full p-2 mt-2 bg-card">
                 <option value="">Pilih Cuaca</option>
                 <option value="sunny">Cerah</option>
                 <option value="rain">Hujan</option>
@@ -340,22 +424,22 @@
                 <option value="hot">Terik</option>
                 <option value="cold">Dingin</option>
               </select>
-              <select id="placeSel" class="w-full p-2 rounded mt-2">
+              <select id="placeSel" class="w-full p-2 mt-2 bg-card">
                 <option value="">Indoor / Outdoor?</option>
                 <option value="indoor">Indoor</option>
                 <option value="outdoor">Outdoor</option>
               </select>
-              <button id="weatherBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Lihat Rekomendasi</button>
+              <button id="weatherBtn" class="mt-2 w-full cta-btn">Lihat Rekomendasi</button>
               <div id="weatherResult" class="mt-2 text-sm muted"></div>
             </div>
-            <div class="card">
-              <h3 class="font-semibold">Outfit Randomizer (Gacha)</h3>
-              <select id="gachaGender" class="w-full p-2 rounded mt-2">
+            <div class="card bg-inner">
+              <h3 class="font-semibold">Outfit Randomizer</h3>
+              <select id="gachaGender" class="w-full p-2 mt-2 bg-card">
                 <option value="">Pilih Gender</option>
                 <option value="female">Perempuan</option>
                 <option value="male">Laki-laki</option>
               </select>
-              <button id="gachaBtn" class="mt-2 bg-blue-600 text-white px-3 py-2 rounded">Random Outfit Today 🎲</button>
+              <button id="gachaBtn" class="mt-2 w-full cta-btn">Random Outfit Today 🎲</button>
               <div id="gachaResult" class="mt-2 text-sm muted"></div>
             </div>
           </div>
@@ -365,28 +449,28 @@
 
     <section id="saved" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-blue-600">Koleksi Simpanan Kamu ❤️</h2>
-        <p class="text-muted">Semua hasil rekomendasi, palet warna, dan outfit yang pernah kamu simpan.</p>
+        <h2 class="text-3xl font-bold text-accent">Koleksi Simpanan Kamu ❤️</h2>
+        <p class="muted">Semua hasil rekomendasi, palet warna, dan outfit yang pernah kamu simpan.</p>
       </div>
 
       <article class="card mb-8">
-        <h3 class="text-xl font-semibold text-blue-600 border-b pb-2 mb-4">📝 Riwayat Rekomendasi Quiz</h3>
+        <h3 class="text-xl font-semibold text-accent border-b border-adaptive pb-2 mb-4">📝 Riwayat Rekomendasi Quiz</h3>
         <div id="savedRecContainer" class="grid gap-4 grid-cols-1 md:grid-cols-2">
-          <p class="text-muted text-sm p-2">Belum ada rekomendasi disimpan.</p>
+          <p class="muted text-sm p-2 bg-inner rounded">Belum ada rekomendasi disimpan.</p>
         </div>
       </article>
 
       <article class="card mb-8">
-        <h3 class="text-xl font-semibold text-blue-600 border-b pb-2 mb-4">🎨 Palette Favorit</h3>
+        <h3 class="text-xl font-semibold text-accent border-b border-adaptive pb-2 mb-4">🎨 Palette Favorit</h3>
         <div id="savedPaletteContainer" class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          <p class="text-muted text-sm p-2">Belum ada palette disimpan.</p>
+          <p class="muted text-sm p-2 bg-inner rounded">Belum ada palette disimpan.</p>
         </div>
       </article>
 
       <article class="card">
-        <h3 class="text-xl font-semibold text-blue-600 border-b pb-2 mb-4">👕 Outfit Saya (Mix & Match)</h3>
+        <h3 class="text-xl font-semibold text-accent border-b border-adaptive pb-2 mb-4">👕 Outfit Saya (Mix & Match)</h3>
         <div id="savedOutfitContainer" class="grid gap-6 grid-cols-1 md:grid-cols-2">
-          <p class="text-muted text-sm p-2">Belum ada outfit yang disusun dan disimpan.</p>
+          <p class="muted text-sm p-2 bg-inner rounded">Belum ada outfit yang disusun dan disimpan.</p>
         </div>
       </article>
     </section>
@@ -397,10 +481,10 @@
     <div class="modal">
       <div class="flex justify-between items-start">
         <h3 id="modalTitle" class="text-xl font-bold"></h3>
-        <button id="closeModal" class="text-xl">✕</button>
+        <button id="closeModal" class="text-xl text-accent">✕</button>
       </div>
       <img id="modalImg" src="https://via.placeholder.com/900x500/ADD8E6/ffffff?text=MODAL+IMAGE" alt="style image" class="w-full h-56 object-cover rounded mt-3" />
-      <p id="modalDesc" class="text-muted mt-3"></p>
+      <p id="modalDesc" class="muted mt-3"></p>
       <div id="modalTags" class="mt-3 flex gap-2 flex-wrap"></div>
     </div>
   </div>
@@ -468,16 +552,17 @@
       { id:'muted', name:'Muted Sophisticate', colors:['#E3D5FF','#D3EAFB','#FFF1E6','#E6E6E6'], desc:'Halus, office & chic' }
     ];
 
+    // DATA STYLE DICTIONARY
     const styleData = [
-      { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern.' },
-      { name:'Vintage Classic', category:'retro', img:'vin.jpeg', desc:'Nuansa retro earthy.' },
-      { name:'Korean Minimalist', category:'modern', img:'kor.jpeg', desc:'Siluet bersih, rapi.' },
-      { name:'Elegant Formal', category:'elegant', img:'elfor.jpeg', desc:'Blazer, dress, premium.' },
-      { name:'Techwear', category:'street', img:'tech.jpeg', desc:'Futuristik, waterproof.' },
-      { name:'Soft Romantic', category:'minimal', img:'sorom.jpeg', desc:'Pastel, flowy, renda.' },
-      { name:'Monochrome Chic', category:'modern', img:'mmn.jpeg', desc:'Monokrom elegan.' },
-      { name:'Preppy Style', category:'classic', img:'prep.jpeg', desc:'Kesan bersih, berkelas.' },
-      { name:'Bohemian (Boho)', category:'retro', img:'boho.jpeg', desc:'Gaya bebas, artistik.' }
+      { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
+      { name:'Vintage Classic', category:'retro', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm','classic'] },
+      { name:'Korean Minimalist', category:'modern', img:'kor.jpeg', desc:'Siluet bersih, warna netral, rapi. Ideal untuk look daily dan campus.', tags:['kuliah','office'] },
+      { name:'Elegant Formal', category:'elegant', img:'elfor.jpeg', desc:'Blazer, dress, material premium untuk formal event.', tags:['kerja','kondangan'] },
+      { name:'Techwear', category:'street', img:'tech.jpeg', desc:'Futuristik, banyak kantong, material waterproof. Cocok untuk outdoor urban.', tags:['outdoor','night'] },
+      { name:'Soft Romantic', category:'minimal', img:'sorom.jpeg', desc:'Pastel, flowy, dan detail renda; vibe lembut & dreamy.', tags:['pastel','soft'] },
+      { name:'Monochrome Chic', category:'modern', img:'mmn.jpeg', desc:'Monokrom yang elegan; bermain dengan tekstur bukan warna.', tags:['minimal','workwear'] },
+      { name:'Preppy Style', category:'classic', img:'prep.jpeg', desc:'Kesan bersih, teratur, dan berkelas. Polo shirt, kemeja Oxford, sweater rajut, blazer dengan lambang, celana khaki, loafers.', tags:['clean','campus','formal'] },
+      { name:'Bohemian (Boho)', category:'retro', img:'boho.jpeg', desc:'Gaya yang bebas, artistik, dan terinspirasi dari alam atau budaya hippies. Mengutamakan tekstur dan motif etnik. Pakaian longgar, renda, sulaman.', tags:['art','nature','floral'] }
     ];
 
     // Theme
@@ -607,11 +692,11 @@
         const item = getItem(id);
         if(item) {
           $('#recImages').append(`
-            <div class="card p-2 text-center border border-blue-50">
-              <div class="w-full h-28 overflow-hidden rounded-md mb-2 bg-gray-100">
+            <div class="card p-2 text-center border border-adaptive bg-inner">
+              <div class="w-full h-28 overflow-hidden rounded-md mb-2 bg-card">
                 <img src="${item.img}" class="w-full h-full object-cover" alt="${item.name}">
               </div>
-              <div class="text-xs font-bold text-gray-700">${item.name}</div>
+              <div class="text-xs font-bold">${item.name}</div>
             </div>
           `);
         }
@@ -634,7 +719,7 @@
     function renderSwatches(){
       $('#swatchGrid').html('');
       palettes.forEach(p => {
-        $('#swatchGrid').append(`<div class="p-3 card cursor-pointer" data-id="${p.id}">
+        $('#swatchGrid').append(`<div class="p-3 card cursor-pointer border-adaptive" data-id="${p.id}">
           <div class="grid grid-cols-4 gap-1 mb-3">${p.colors.map(c=>`<div style="background:${c}" class="h-12 rounded"></div>`).join('')}</div>
           <div class="font-semibold">${p.name}</div><div class="text-xs muted">${p.desc}</div></div>`);
       });
@@ -670,12 +755,50 @@
       alert('Palette disimpan ke Koleksi!');
     });
 
+    /* ======= Style Dictionary Logic (FIXED) ======= */
+    function renderGrid(filter='all'){
+      $('#styleGrid').hide().html('');
+      styleData.forEach((s,i)=>{
+        if(filter!=='all' && s.category!==filter) return;
+        const card = `<div class="card hover-raise cursor-pointer" role="button" data-index="${i}">
+          <div class="w-full h-48 overflow-hidden rounded mb-2 border border-adaptive"><img src="${s.img}" alt="${s.name}" class="w-full h-full object-cover"></div>
+          <h4 class="font-semibold">${s.name}</h4>
+          <p class="text-sm muted">${s.desc.substring(0,80)}...</p>
+        </div>`;
+        $('#styleGrid').append(card);
+      });
+      $('#styleGrid').fadeIn(180);
+    }
+    renderGrid(); // Initial Render
+
+    // Fixed Filter Listener
+    $(document).on('click','.filter-btn', function(){
+      $('.filter-btn').removeClass('bg-accent text-white').addClass('bg-inner');
+      $(this).removeClass('bg-inner').addClass('bg-accent text-white');
+      const f = $(this).data('filter') || 'all';
+      renderGrid(f);
+    });
+
+    // Fixed Modal Listener
+    $(document).on('click','#styleGrid [data-index]', function(){
+      const i = $(this).data('index');
+      const s = styleData[i];
+      $('#modalTitle').text(s.name);
+      $('#modalImg').attr('src', s.img).attr('alt', s.name);
+      $('#modalDesc').text(s.desc);
+      $('#modalTags').html(s.tags.map(t=>`<span class="chip">${t}</span>`).join(' '));
+      $('#styleModal').removeClass('hidden').addClass('modal-backdrop');
+    });
+    $('#closeModal').on('click', ()=> $('#styleModal').addClass('hidden').removeClass('modal-backdrop'));
+    $('#styleModal').on('click', function(e){ if(e.target.id==='styleModal') { $(this).addClass('hidden').removeClass('modal-backdrop'); }});
+
+
     /* ======= Mix & Match Logic ======= */
     function renderMixItems(){
       $('#mixItems').html('');
       mixItems.forEach(it=>{
         $('#mixItems').append(`<div draggable="true" data-id="${it.id}" data-slot="${it.slot}" class="card cursor-grab mix-item-card hover-raise">
-          <div class="w-full h-36 overflow-hidden rounded mb-2 pointer-events-none"><img src="${it.img}" alt="${it.name}" class="w-full h-full object-cover" /></div>
+          <div class="w-full h-36 overflow-hidden rounded mb-2 pointer-events-none bg-inner"><img src="${it.img}" alt="${it.name}" class="w-full h-full object-cover" /></div>
           <div class="font-semibold pointer-events-none">${it.name}</div><div class="text-xs muted pointer-events-none">slot: ${it.slot}</div></div>`);
       });
     }
@@ -692,7 +815,7 @@
       this.addEventListener('drop', function(e){
         e.preventDefault(); $(this).removeClass('drag-over');
         if(dragData && dragData.slot === $(this).data('slot')) {
-          $(this).find('.slot-val').text(dragData.name).addClass('text-blue-600');
+          $(this).find('.slot-val').text(dragData.name).addClass('text-accent');
           $(this).data('item', dragData.id);
         }
       });
@@ -701,17 +824,17 @@
     // Tap select logic
     let selectedTapItem = null;
     $(document).on('click', '.mix-item-card', function(){
-      $('.mix-item-card').removeClass('selected-item border-blue-500 ring-2 ring-blue-500');
+      $('.mix-item-card').removeClass('selected-item border-accent ring-2 ring-blue-500');
       if (selectedTapItem && selectedTapItem.id === $(this).data('id')) { selectedTapItem = null; return; }
-      $(this).addClass('selected-item border-blue-500 ring-2 ring-blue-500');
+      $(this).addClass('selected-item border-accent ring-2 ring-blue-500');
       selectedTapItem = { id: $(this).data('id'), slot: $(this).data('slot'), name: $(this).find('.font-semibold').text() };
     });
     $('.drop-slot').on('click', function(){
       if(!selectedTapItem) return;
       if(selectedTapItem.slot === $(this).data('slot')) {
-        $(this).find('.slot-val').text(selectedTapItem.name).addClass('text-blue-600');
+        $(this).find('.slot-val').text(selectedTapItem.name).addClass('text-accent');
         $(this).data('item', selectedTapItem.id);
-        $('.mix-item-card').removeClass('selected-item border-blue-500 ring-2 ring-blue-500');
+        $('.mix-item-card').removeClass('selected-item border-accent ring-2 ring-blue-500');
         selectedTapItem = null;
       }
     });
@@ -741,7 +864,7 @@
     });
     
     $('#clearOutfit').on('click', function(){
-      $('.drop-slot').each(function(){ $(this).find('.slot-val').text('—').removeClass('text-blue-600'); $(this).removeData('item'); });
+      $('.drop-slot').each(function(){ $(this).find('.slot-val').text('—').removeClass('text-accent'); $(this).removeData('item'); });
     });
 
     /* ======= SAVED PAGE RENDERING LOGIC ======= */
@@ -759,19 +882,19 @@
       const recs = JSON.parse(localStorage.getItem('sm_saved_recs') || '[]');
       const recContainer = $('#savedRecContainer');
       recContainer.html('');
-      if(recs.length === 0) recContainer.html('<p class="text-muted col-span-2 p-4 bg-gray-50 rounded">Belum ada rekomendasi tersimpan.</p>');
+      if(recs.length === 0) recContainer.html('<p class="muted col-span-2 p-4 bg-inner rounded">Belum ada rekomendasi tersimpan.</p>');
       else {
         recs.forEach(r => {
           // Get image thumbnails
           const thumbs = r.rec.itemIds.map(tid => {
             const item = getItem(tid);
-            return item ? `<img src="${item.img}" class="w-8 h-8 rounded object-cover border">` : '';
+            return item ? `<img src="${item.img}" class="w-8 h-8 rounded object-cover border border-adaptive">` : '';
           }).join('');
           
           recContainer.append(`
-            <div class="card border border-gray-100 relative">
+            <div class="card border-adaptive relative">
               <button onclick="deleteSavedItem('rec', ${r.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="text-xs text-blue-600 font-bold mb-1">${r.date}</div>
+              <div class="text-xs text-accent font-bold mb-1">${r.date}</div>
               <div class="font-semibold text-sm mb-1">${r.rec.styles[0]}</div>
               <div class="text-xs muted mb-2">Palette: ${r.rec.palette.name}</div>
               <div class="flex gap-1 mt-2">${thumbs}</div>
@@ -784,14 +907,14 @@
       const pals = JSON.parse(localStorage.getItem('sm_saved_palettes') || '[]');
       const palContainer = $('#savedPaletteContainer');
       palContainer.html('');
-      if(pals.length === 0) palContainer.html('<p class="text-muted col-span-2 p-4 bg-gray-50 rounded">Belum ada palette tersimpan.</p>');
+      if(pals.length === 0) palContainer.html('<p class="muted col-span-2 p-4 bg-inner rounded">Belum ada palette tersimpan.</p>');
       else {
         pals.forEach(p => {
           const colorsHtml = p.colors.map(c => `<div style="background:${c}" class="h-8 w-8 rounded-full border shadow-sm"></div>`).join('');
           palContainer.append(`
-            <div class="card border border-gray-100 relative">
+            <div class="card border-adaptive relative">
               <button onclick="deleteSavedItem('pal', '${p.id}')" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="font-bold text-gray-800">${p.name}</div>
+              <div class="font-bold">${p.name}</div>
               <div class="flex gap-1 my-2 justify-center">${colorsHtml}</div>
               <div class="text-xs muted">${p.desc}</div>
             </div>
@@ -803,7 +926,7 @@
       const outfits = JSON.parse(localStorage.getItem('sm_saved_outfits') || '[]');
       const outContainer = $('#savedOutfitContainer');
       outContainer.html('');
-      if(outfits.length === 0) outContainer.html('<p class="text-muted col-span-2 p-4 bg-gray-50 rounded">Belum ada outfit tersimpan.</p>');
+      if(outfits.length === 0) outContainer.html('<p class="muted col-span-2 p-4 bg-inner rounded">Belum ada outfit tersimpan.</p>');
       else {
         outfits.forEach(o => {
           let gridHtml = '';
@@ -812,17 +935,17 @@
             const it = getItem(iId);
             if(it) {
               gridHtml += `
-                <div class="flex flex-col items-center p-2 bg-gray-50 rounded">
+                <div class="flex flex-col items-center p-2 bg-inner rounded border border-adaptive">
                   <img src="${it.img}" class="w-16 h-16 object-cover rounded mb-1">
-                  <span class="text-[10px] text-gray-500 uppercase">${slot}</span>
+                  <span class="text-[10px] muted uppercase">${slot}</span>
                 </div>`;
             }
           });
           
           outContainer.append(`
-            <div class="card border border-gray-100 relative">
+            <div class="card border-adaptive relative">
               <button onclick="deleteSavedItem('out', ${o.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600">🗑️</button>
-              <div class="text-xs text-blue-600 font-bold mb-2">Outfit ${o.date}</div>
+              <div class="text-xs text-accent font-bold mb-2">Outfit ${o.date}</div>
               <div class="grid grid-cols-4 gap-2">
                 ${gridHtml || '<div class="text-sm muted col-span-4">Item data error/missing</div>'}
               </div>
@@ -833,26 +956,57 @@
     }
 
     /* ======= Other Tools ======= */
-    $('#styleGrid').html(''); // Simple grid render logic for style (simplified for brevity as it was same as before)
-    styleData.forEach((s,i)=> {
-      $('#styleGrid').append(`<div class="card hover-raise cursor-pointer" role="button" data-index="${i}">
-          <div class="w-full h-48 overflow-hidden rounded mb-2"><img src="${s.img}" alt="${s.name}" class="w-full h-full object-cover"></div>
-          <h4 class="font-semibold">${s.name}</h4>
-          <p class="text-sm muted">${s.desc.substring(0,80)}...</p></div>`);
+    const vibeMap = {
+      cute:{desc:'Soft pastel, playful silhouettes', colors:['#FFD6E0','#FFDCAE','#C7DDFF']},
+      minimal:{desc:'Neutral tones, clean lines', colors:['#F8FAFC','#CBD5E1','#9AA8B2']},
+      elegant:{desc:'Tailored, richer fabrics', colors:['#1F2937','#6B7280','#F3E8DC']},
+      cool:{desc:'Street/edgy pieces, monochrome', colors:['#0F172A','#334155','#89A9FF']},
+      cozy:{desc:'Layered knits, warm tones', colors:['#F7D6B3','#C6A78B','#EAFBF7']},
+      street:{desc:'Casual urban, practical', colors:['#111827','#6B7280','#B8B8B8']}
+    };
+    $(document).on('click','.vibe-btn', function(){
+      const v = $(this).data('vibe');
+      const info = vibeMap[v];
+      $('#vibeResult').html(`<strong>${v.toUpperCase()}</strong><p class="text-sm">${info.desc}</p><div class="flex gap-2 mt-2">${info.colors.map(c=>`<div style="background:${c}" class="w-10 h-8 rounded"></div>`).join('')}</div>`);
     });
-    
-    // Style Modal
-    $(document).on('click','#styleGrid [data-index]', function(){
-      const i = $(this).data('index');
-      const s = styleData[i];
-      $('#modalTitle').text(s.name);
-      $('#modalImg').attr('src', s.img).attr('alt', s.name);
-      $('#modalDesc').text(s.desc);
-      $('#modalTags').html(s.tags.map(t=>`<span class="chip">${t}</span>`).join(' '));
-      $('#styleModal').removeClass('hidden').addClass('modal-backdrop');
+
+    $('#calcBP').on('click', function(){
+      const h = parseFloat($('#bpHeight').val());
+      const w = parseFloat($('#bpWeight').val());
+      if(!h || !w){ alert('Isi tinggi & berat dulu'); return; }
+      const bmi = (w / ((h/100)*(h/100))).toFixed(1);
+      $('#bpResult').text(`BMI: ${bmi}. Pilih potongan yang seimbang.`);
     });
-    $('#closeModal').on('click', ()=> $('#styleModal').addClass('hidden').removeClass('modal-backdrop'));
-    $('#styleModal').on('click', function(e){ if(e.target.id==='styleModal') { $(this).addClass('hidden').removeClass('modal-backdrop'); }});
+
+    const weatherMap = {
+      sunny:'Kaos ringan, topi, kacamata hitam', rain:'Hoodie + waterproof jacket', cloudy:'Layering ringan', hot:'Atasan adem, celana pendek', cold:'Coat, knit, boots'
+    };
+    $('#weatherBtn').on('click', function(){
+      const w = $('#weatherSel').val(); const p = $('#placeSel').val();
+      if(!w || !p){ alert('Pilih cuaca & tempat dulu'); return; }
+      const r = weatherMap[w] + (p==='outdoor' ? ' (sesuaikan alas kaki outdoor)' : '');
+      $('#weatherResult').text(r);
+    });
+
+    // Gacha
+    const outfits = [
+      {gender:'male', name:'Casual Weekend', desc:'Casual tee + denim + sneakers'},
+      {gender:'female', name:'Date Night', desc:'Soft blouse + midi skirt'},
+    ];
+    $('#gachaBtn').on('click', function(){
+      const g = $('#gachaGender').val(); if(!g){ alert('Pilih gender dulu'); return; }
+      const pick = outfits.find(o=>o.gender===g) || outfits[0];
+      $('#gachaResult').html(`<strong>${pick.name}</strong><div class="text-sm mt-1 muted">${pick.desc}</div>`);
+    });
+
+    // Scroll sync disabled
+    $(window).on('scroll', function(){});
+
+    if(localStorage.getItem('sm_savedOutfit')){
+      const saved = JSON.parse(localStorage.getItem('sm_savedOutfit'));
+      $('.drop-slot').each(function(){ const s=$(this).data('slot'); if(saved[s]) $(this).find('.slot-val').text(saved[s]); });
+    }
+    $(document).on('keydown', function(e){ if(e.key === 'Escape'){ $('#sidebar').removeClass('open'); $('#styleModal').addClass('hidden').removeClass('modal-backdrop'); } });
 
   })();
   </script>
