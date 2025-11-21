@@ -55,7 +55,7 @@
     /* aesthetic */
     .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:rgba(0,0,0,0.06);font-size:.85rem}
     /* drop slot */
-    .drop-slot{min-height:48px}
+    .drop-slot{min-height:48px; transition: background 0.3s;}
     /* improved image frame */
     .hero-media { max-width:520px; width:100%; height:360px; border-radius:12px; overflow:hidden; box-shadow:0 12px 30px rgba(2,6,23,0.08) }
     /* better contrast for dark theme actionable items */
@@ -66,6 +66,19 @@
     /* make buttons and selects look consistent */
     select, input[type="number"] { background: transparent; border:1px solid rgba(15,23,42,0.08); border-radius:8px }
     .theme-dark select, .theme-dark input[type="number"] { border:1px solid rgba(255,255,255,0.06) }
+    
+    /* === FIX: Sticky Sidebar & Drop Target Styling === */
+    .sticky-sidebar {
+      position: sticky;
+      top: 110px; /* Menyesuaikan tinggi header */
+      height: fit-content;
+      z-index: 10;
+    }
+    
+    /* Highlight visual saat drag atau selected */
+    .drop-slot.drag-over { background: rgba(37, 99, 235, 0.1); border-color: var(--accent); border-style: dashed; }
+    .card.selected-item { outline: 3px solid var(--accent); transform: scale(0.98); }
+    .mix-item-card { touch-action: none; } /* Mencegah scroll default saat touch di item (opsional, tapi kita pakai tap logic) */
   </style>
 </head>
 <body class="theme-light">
@@ -260,19 +273,26 @@
     <section id="mixmatch" class="section hidden-section max-w-6xl mx-auto px-4 py-8">
       <article class="card">
         <h2 class="text-2xl font-semibold text-blue-600">Mix & Match (Drag & Drop)</h2>
-        <p class="text-sm muted mb-4">Seret item ke slot yang sesuai untuk menyusun outfit-mu. (Drop-to-slot yang valid — UX lebih ketat agar tidak salah slot)</p>
+        <p class="text-sm muted mb-4">
+          <strong>Cara Pakai:</strong> Drag item ke slot, ATAU klik item lalu klik slot tujuan (Tap-to-Fill) untuk kemudahan di HP.
+        </p>
 
-        <div class="grid md:grid-cols-3 gap-4">
+        <div class="grid md:grid-cols-3 gap-4 relative">
           <div id="mixItems" class="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-          <div class="card">
-            <h3 class="font-semibold">Your Outfit</h3>
-            <div id="dropArea" class="mt-3 space-y-2">
-              <div class="drop-slot p-2 border rounded" data-slot="top">Top: <span class="slot-val">—</span></div>
-              <div class="drop-slot p-2 border rounded" data-slot="bottom">Bottom: <span class="slot-val">—</span></div>
-              <div class="drop-slot p-2 border rounded" data-slot="shoes">Shoes: <span class="slot-val">—</span></div>
-              <div class="drop-slot p-2 border rounded" data-slot="acc">Accessory: <span class="slot-val">—</span></div>
+          
+          <div class="sticky-sidebar">
+            <div class="card border border-blue-100 shadow-lg">
+              <h3 class="font-semibold text-blue-600">Your Outfit</h3>
+              <p class="text-xs muted mb-2">Drag ke sini, atau klik item lalu klik slot.</p>
+              <div id="dropArea" class="mt-3 space-y-2">
+                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="top">Top: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="bottom">Bottom: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="shoes">Shoes: <span class="slot-val font-medium">—</span></div>
+                <div class="drop-slot p-2 border rounded bg-slate-50" data-slot="acc">Accessory: <span class="slot-val font-medium">—</span></div>
+              </div>
+              <button id="saveOutfit" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded transition">Simpan Outfit</button>
+              <button id="clearOutfit" class="mt-2 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded transition text-sm">Reset Slot</button>
             </div>
-            <button id="saveOutfit" class="mt-3 bg-blue-600 text-white px-3 py-2 rounded">Simpan Outfit</button>
           </div>
         </div>
       </article>
@@ -392,8 +412,6 @@
       $('.section').addClass('hidden-section');
       $('#'+id).removeClass('hidden-section');
       setActiveNav(id);
-      // window.scrollTo removal to handle custom scroll animation for buttons
-      // window.scrollTo({top:0,behavior:'smooth'}); 
     }
 
     // Initial: show home
@@ -404,7 +422,7 @@
     $('#closeSidebar').on('click', ()=> $('#sidebar').removeClass('open'));
     $('#sidebar').on('click', (e)=> { if(e.target.id==='sidebar') $('#sidebar').removeClass('open'); });
 
-    // Nav buttons (both sidebar and header)
+    // Nav buttons
     $(document).on('click','.nav-btn', function(){
       const t = $(this).data('target');
       if(t) {
@@ -414,9 +432,9 @@
       $('#sidebar').removeClass('open');
     });
 
-    // Handle tombol Mulai Sekarang / CTA
+    // CTA
     $('.cta').on('click', function(e){
-      e.preventDefault(); // Mencegah default anchor jump
+      e.preventDefault();
       showSection('home');
       const target = $('#home h2');
       if(target.length){
@@ -432,7 +450,6 @@
       document.body.className = 'theme-' + t;
       localStorage.setItem('sm_theme', t);
     });
-    // toggle theme quick
     $('#themeToggle').on('click', function(){
       const current = (document.body.className || '').replace('theme-','') || 'light';
       const order = ['light','pinkblue','bluepurple','bluegreen','dark'];
@@ -443,11 +460,10 @@
       localStorage.setItem('sm_theme', next);
     });
 
-    // Explore styles CTA
     $('#exploreStyles').on('click', ()=> { showSection('style'); window.scrollTo({top:0,behavior:'smooth'}); });
     $('#tryPalette').on('click', ()=> { showSection('color'); window.scrollTo({top:0,behavior:'smooth'}); });
 
-    /* ======= Step A: Outfit Recommender (enhanced) ======= */
+    /* ======= Step A: Outfit Recommender ======= */
     function getOutfit(gender, skinTone, occasion){
       const db = [
         { cond: {gender:'female', skin:'light', occ:'formal'}, val:{style:'Minimalist Formal', colors:['navy','beige','soft black'], outfit:'Blouse polos, midi skirt, heels netral', samples:['Blouse putih + midi beige','Navy blazer + skirt krem']} },
@@ -483,7 +499,7 @@
       $('html,body').animate({scrollTop: $('#result').offset().top-80},300);
     });
 
-    /* ======= Step B: Style Dictionary (MODIFIED) ======= */
+    /* ======= Step B: Style Dictionary (Restored Images) ======= */
     const styleData = [
       { name:'Streetwear', category:'street', img:'stw.jpeg', desc:'Gaya kasual modern: hoodie, oversized, sneakers. Cocok untuk hangout & festival.', tags:['hangout','santai','youth'] },
       { name:'Vintage Classic', category:'retro', img:'vin.jpeg', desc:'Nuansa retro dengan warna earthy dan siluet klasik; cocok untuk pencinta detail dan tekstur.', tags:['retro','calm','classic'] },
@@ -518,7 +534,6 @@
       renderGrid(f);
     });
 
-    // open modal
     $(document).on('click','#styleGrid [data-index]', function(){
       const i = $(this).data('index');
       const s = styleData[i];
@@ -592,8 +607,7 @@
       $('#selectedPalette').html(arr.map(c=>`<div style="background:${c}" class="w-14 h-10 rounded border"></div>`).join(''));
     }
 
-    /* ======= Step E: Mix & Match (drag & drop) (UPDATED) ======= */
-    // MODIFIKASI: Menambahkan item baru sesuai permintaan tanpa menghapus item lama
+    /* ======= Step E: Mix & Match (IMPROVED with Auto-Scroll & Tap-to-Select) & RESTORED IMAGES ======= */
     const mixItems = [
       // Item Lama
       { id:'t1', slot:'top', name:'White Tee', img:'whitetee.jpg' },
@@ -602,27 +616,23 @@
       { id:'b2', slot:'bottom', name:'Cargo Pants', img:'cargo.jpg' },
       { id:'s1', slot:'shoes', name:'Sneakers', img:'Sneakers.jpg' },
       { id:'a1', slot:'acc', name:'Beanie', img:'beanie.jpg' },
-      
       // Item Baru - Tops
       { id:'t3', slot:'top', name:'Kemeja Oxford', img:'keem.jpg' },
       { id:'t4', slot:'top', name:'Blouse Sutra', img:'blouse.jpg' },
       { id:'t5', slot:'top', name:'Sweater / Knit', img:'swea.jpg' },
       { id:'t6', slot:'top', name:'Denim Shirt', img:'denimshrt.jpeg' },
       { id:'t7', slot:'top', name:'Turtle Neck', img:'turneck.jpeg' },
-
       // Item Baru - Bottoms
       { id:'b3', slot:'bottom', name:'Tailored Trousers', img:'tailtrous.jpeg' },
       { id:'b4', slot:'bottom', name:'Pleated Skirt', img:'pltdskrt.jpeg' },
       { id:'b5', slot:'bottom', name:'Chinos / Khaki', img:'chinos.jpeg' },
       { id:'b6', slot:'bottom', name:'Leather Skirt', img:'leathrskrt.jpeg' },
       { id:'b7', slot:'bottom', name:'Jogger Pants', img:'joggrspnts.jpeg' },
-
       // Item Baru - Shoes
       { id:'s2', slot:'shoes', name:'Clean White Sneakers', img:'whitsneakr.jpeg' },
       { id:'s3', slot:'shoes', name:'Loafers', img:'loafr.jpeg' },
       { id:'s4', slot:'shoes', name:'Ankle Boots', img:'ankel.jpeg' },
       { id:'s5', slot:'shoes', name:'Heeled Pumps', img:'heelpum.jpeg' },
-
       // Item Baru - Accessories
       { id:'a2', slot:'acc', name:'Tote Bag', img:'tote.jpeg' },
       { id:'a3', slot:'acc', name:'Belt', img:'belt.jpeg' },
@@ -639,9 +649,9 @@
     function renderMixItems(){
       $('#mixItems').html('');
       mixItems.forEach(it=>{
-        const el = `<div draggable="true" data-id="${it.id}" data-slot="${it.slot}" class="card cursor-grab">
-          <div class="w-full h-36 overflow-hidden rounded mb-2"><img src="${it.img}" alt="${it.name}" class="w-full h-full object-cover" /></div>
-          <div class="font-semibold">${it.name}</div><div class="text-xs muted">slot: ${it.slot}</div>
+        const el = `<div draggable="true" data-id="${it.id}" data-slot="${it.slot}" class="card cursor-grab mix-item-card hover-raise">
+          <div class="w-full h-36 overflow-hidden rounded mb-2 pointer-events-none"><img src="${it.img}" alt="${it.name}" class="w-full h-full object-cover" /></div>
+          <div class="font-semibold pointer-events-none">${it.name}</div><div class="text-xs muted pointer-events-none">slot: ${it.slot}</div>
         </div>`;
         $('#mixItems').append(el);
       });
@@ -649,24 +659,111 @@
     renderMixItems();
 
     let dragData = null;
-    $(document).on('dragstart','[draggable="true"]', function(e){ dragData = { id: $(this).data('id'), slot: $(this).data('slot'), name: $(this).find('.font-semibold').text() }; });
+
+    /* 1. Standard HTML5 Drag Start */
+    $(document).on('dragstart','[draggable="true"]', function(e){ 
+      dragData = { id: $(this).data('id'), slot: $(this).data('slot'), name: $(this).find('.font-semibold').text() }; 
+    });
+
+    /* 2. Auto Scroll Logic during Drag */
+    document.addEventListener('dragover', function(e){
+      e.preventDefault(); // Allow drop
+      const threshold = 50; // Area deteksi di atas/bawah (px)
+      const scrollSpeed = 15; // Kecepatan scroll
+
+      // Scroll ke atas
+      if (e.clientY < threshold) {
+        window.scrollBy(0, -scrollSpeed);
+      }
+      // Scroll ke bawah
+      else if (e.clientY > (window.innerHeight - threshold)) {
+        window.scrollBy(0, scrollSpeed);
+      }
+    });
+
+    /* 3. Handle Drop Events */
     $('.drop-slot').each(function(){
-      this.addEventListener('dragover', function(e){ e.preventDefault(); });
+      this.addEventListener('dragover', function(e){ 
+        e.preventDefault(); 
+        $(this).addClass('drag-over');
+      });
+      
+      this.addEventListener('dragleave', function(e){
+        $(this).removeClass('drag-over');
+      });
+
       this.addEventListener('drop', function(e){
-        const target = $(this);
-        if(!dragData) return;
-        const slot = target.data('slot');
-        if(slot !== dragData.slot){ alert('Salah slot! Drop ke slot yang sesuai.'); return; }
-        target.find('.slot-val').text(dragData.name);
-        target.data('item', dragData.id);
+        e.preventDefault();
+        $(this).removeClass('drag-over');
+        handleItemDrop($(this), dragData);
         dragData = null;
       });
     });
+
+    /* 4. Mobile/UX Fix: "Tap to Select" Logic (Alternative to dragging) */
+    let selectedTapItem = null;
+
+    // Klik Item untuk Select
+    $(document).on('click', '.mix-item-card', function(){
+      // Reset visual seleksi sebelumnya
+      $('.mix-item-card').removeClass('selected-item border-blue-500 ring-2 ring-blue-500');
+      
+      // Jika klik item yg sama, deselect
+      if (selectedTapItem && selectedTapItem.id === $(this).data('id')) {
+        selectedTapItem = null;
+        return;
+      }
+
+      // Select baru
+      $(this).addClass('selected-item border-blue-500 ring-2 ring-blue-500');
+      selectedTapItem = { 
+        id: $(this).data('id'), 
+        slot: $(this).data('slot'), 
+        name: $(this).find('.font-semibold').text() 
+      };
+    });
+
+    // Klik Slot untuk Fill (jika ada item ter-select)
+    $('.drop-slot').on('click', function(){
+      if(!selectedTapItem) return;
+
+      handleItemDrop($(this), selectedTapItem);
+      
+      // Reset selection setelah drop sukses
+      $('.mix-item-card').removeClass('selected-item border-blue-500 ring-2 ring-blue-500');
+      selectedTapItem = null;
+    });
+
+    // Logic bersama untuk Drop & Tap
+    function handleItemDrop(targetSlot, itemData) {
+      if(!itemData) return;
+      const requiredSlot = targetSlot.data('slot');
+      
+      if(requiredSlot !== itemData.slot){ 
+        alert(`Item ini untuk slot "${itemData.slot}", bukan "${requiredSlot}".`); 
+        return; 
+      }
+      
+      targetSlot.find('.slot-val').text(itemData.name).removeClass('muted').addClass('text-blue-600');
+      targetSlot.data('item', itemData.id);
+      
+      // Animasi visual kecil tanda sukses
+      targetSlot.fadeOut(100).fadeIn(100);
+    }
+
+    /* Save & Clear Outfit */
     $('#saveOutfit').on('click', function(){
       const out = {};
       $('.drop-slot').each(function(){ out[$(this).data('slot')] = $(this).data('item') || null; });
       localStorage.setItem('sm_savedOutfit', JSON.stringify(out));
       alert('Outfit disimpan!');
+    });
+
+    $('#clearOutfit').on('click', function(){
+      $('.drop-slot').each(function(){
+        $(this).find('.slot-val').text('—').removeClass('text-blue-600');
+        $(this).removeData('item');
+      });
     });
 
     /* ======= Step F: Vibe & Body Proportion ======= */
@@ -779,8 +876,7 @@
       for(let id of sections){
         const el = $('#'+id);
         if(el.length){
-          const top = el.offset().top, h = el.outerHeight();
-          // if(sTop >= top && sTop < top + h){ setActiveNav(id); break; }
+          // active logic disabled to prevent jumping, handled manually on click
         }
       }
     });
